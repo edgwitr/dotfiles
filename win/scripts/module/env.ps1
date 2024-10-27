@@ -1,0 +1,20 @@
+[System.Environment]::SetEnvironmentVariable(
+    "XDG_CACHE_HOME",
+    $env:TEMP,
+    [System.EnvironmentVariableTarget]::User
+)
+[System.Environment]::SetEnvironmentVariable(
+    "XDG_STATE_HOME",
+    $env:LOCALAPPDATA,
+    [System.EnvironmentVariableTarget]::User
+)
+[System.Environment]::SetEnvironmentVariable(
+    "XDG_DATA_HOME",
+    $env:APPDATA,
+    [System.EnvironmentVariableTarget]::User
+)
+[System.Environment]::SetEnvironmentVariable(
+    "XDG_CONFIG_HOME",
+    "$env:USERPROFILE/Document",
+    [System.EnvironmentVariableTarget]::User
+)

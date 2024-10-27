@@ -66,7 +66,7 @@ function ExpandAliasBeforeCursor ($key, $arg) {
     # 複数プレースホルダ対応
     $placeholderIndex = 0
     for ($i = 0; $i -lt $placeholders; $i++) {
-      $placeholderIndex = $expands_to.IndexOf("%")
+      $placeholderIndex = $expands_to.IndexOf($_placeHolder)
       if ($placeholderIndex -ge 0) {
         $expands_to = $expands_to.Substring(0, $placeholderIndex) + $expands_to.Substring($placeholderIndex + 1)
         [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
