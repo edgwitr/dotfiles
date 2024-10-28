@@ -1,7 +1,7 @@
 function which {
     param (
-        [string]$command,         # コマンド名を引数として受け取る
-        [switch][Alias("a")]$all  # `-a`をエイリアスとして`-all`と同様の機能を持たせる
+        [string]$command,
+        [switch][Alias("a")]$all
     )
 
     [System.Management.Automation.CommandInfo]$cmd = Get-Command $command
