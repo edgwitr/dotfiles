@@ -15,6 +15,6 @@
 )
 [System.Environment]::SetEnvironmentVariable(
     "XDG_CONFIG_HOME",
-    "%USERPROFILE%\Document",
+    "%USERPROFILE%\Documents",
     [System.EnvironmentVariableTarget]::User
 )

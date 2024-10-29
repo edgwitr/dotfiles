@@ -1,4 +1,5 @@
-if (Test-Path ./local.ps1) { . ./local.ps1 }
+if (Test-Path $PSScriptRoot/local.ps1) { . $PSScriptRoot/local.ps1 } else { echo ya }
+echo "fuga"
 # using namespace System.Management.Automation
 # using namespace System.Management.Automation.Language
 
