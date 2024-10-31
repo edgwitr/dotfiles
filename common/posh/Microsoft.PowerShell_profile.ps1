@@ -1,5 +1,6 @@
-if (Test-Path $PSScriptRoot/local.ps1) { . $PSScriptRoot/local.ps1 } else { echo ya }
-echo "fuga"
+Import-Module Envs
+if (Test-Path $PSScriptRoot/local.ps1) { . $PSScriptRoot/local.ps1 }
+
 # using namespace System.Management.Automation
 # using namespace System.Management.Automation.Language
 
