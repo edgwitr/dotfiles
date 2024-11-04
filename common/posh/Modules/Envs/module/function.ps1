@@ -1,12 +1,15 @@
+# no arguments function
 function functions {
     Get-ChildItem function:
 }
 function printenv {
     Get-ChildItem env:
 }
-function greps {
-    Select-String -Encoding ansi @args
+function proxy {
+    Select-String -Path $PROFILE.AllUsersAllHosts -Pattern "PROXY"
 }
+
+# takes arguments function
 function which ([string]$command,[switch][Alias("a")]$all) {
     [System.Management.Automation.CommandInfo]$cmd = Get-Command $command
     if (!$all) { $cmd = $cmd | Select-Object -First 1 }
