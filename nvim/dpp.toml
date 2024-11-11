@@ -1,0 +1,24 @@
+[[plugins]]
+repo = 'Shougo/dpp.vim'
+[[plugins]]
+repo = "Shougo/dpp-ext-toml"
+[[plugins]]
+repo = "Shougo/dpp-ext-lazy"
+[[plugins]]
+repo = "Shougo/dpp-ext-installer"
+[[plugins]]
+repo = "Shougo/dpp-protocol-git"
+
+[[plugins]]
+repo = 'vim-denops/denops.vim'
+
+[[plugins]]
+repo = 'vim-denops/denops-shared-server.vim'
+[[plugins]]
+repo = 'vim-denops/denops-helloworld.vim'
+
+[[plugins]]
+repo = 'folke/tokyonight.nvim'
+hook_source = """
+colorscheme tokyonight
+"""
