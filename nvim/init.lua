@@ -19,7 +19,7 @@ vim.opt.runtimepath:append(ext_lazy)
 vim.opt.runtimepath:append(ext_installer)
 
 -- denops shared serverの設定
-vim.g.denops_server_addr = "127.0.0.1:34141"
+-- vim.g.denops_server_addr = "127.0.0.1:34141"
 
 -- denopsのデバッグフラグ
 -- denopsプラグインの開発をしない場合は0(デフォルト)にしてください
@@ -37,10 +37,12 @@ if dpp.load_state(dpp_base) then
   })
 end
 
--- これはなくても大丈夫です。
-vim.api.nvim_create_autocmd("User", {
-	pattern = "Dpp:makeStatePost",
-	callback = function ()
-		vim.notify("dpp make_state() is done")
-	end
-})
+vim.g.mapleader = " "
+vim.keymap.set('n', '<leader>pi', ":call dpp#async_ext_action('installer', 'install')<CR>")
+vim.keymap.set('n', '<leader>pu', ":call dpp#async_ext_action('installer', 'update')<CR>")
+vim.api.nvim_create_user_command('Denossin', function()
+	vim.cmd('call denops_shared_server#install()')
+end, {})
+vim.api.nvim_create_user_command('Denossun', function()
+	vim.cmd('call denops_shared_server#uninstall()')
+end, {})

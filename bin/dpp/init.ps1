@@ -10,5 +10,5 @@ git clone https://github.com/Shougo/dpp-ext-lazy
 git clone https://github.com/Shougo/dpp-ext-toml
 
 mkdir $data/vim-denops
-cd $data/Shougo
+cd $data/vim-denops
 git clone https://github.com/vim-denops/denops.vim

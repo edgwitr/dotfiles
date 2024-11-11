@@ -1,0 +1,41 @@
+[core]
+    quotepath = false
+    whitespace = trailing-space,space-before-tab
+
+[user]
+	name  = "Edgar Aether"
+	email = EdgarAether@outlook.jp
+
+[init]
+    defaultBranch = main
+
+[commit]
+    verbose = true
+
+[merge]
+    ff = false
+    conflictstyle = diff3
+
+[rebase]
+    autosquash = true
+    stat = true
+
+[rerere]
+    enabled = true
+
+[fetch]
+    prune = true
+
+[pull]
+    ff = only
+    rebase = true
+
+[push]
+    useForceIfIncludes = true
+    default = current
+
+[branch]
+    autoSetupMerge = always
+
+[ghq]
+    root = ~/.local/share/ghq

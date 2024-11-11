@@ -12,6 +12,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    certs = {
+      url = "git+ssh://git@github.com/edgwitr/certs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: 
@@ -23,13 +27,15 @@
     # System-wide Configurations
     nixosConfigurations =
     let
-      conf = ({ config, pkgs, lib, nixos-wsl, ... }: {
+      conf = ({ config, pkgs, lib, ... }: {
         time.timeZone = "Asia/Tokyo";
         networking.hostName = "Astrolabe";
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
         security.sudo.wheelNeedsPassword = true;
-        virtualisation.docker.enable = true;
         system.stateVersion = ver;
+      });
+      lnxc = ({ config, pkgs, lib, ... }: {
+        virtualisation.docker.enable = true;
       });
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
         imports = [ nixos-wsl.nixosModules.wsl ];
@@ -38,17 +44,17 @@
         programs.nix-ld.enable = true;
         programs.nix-ld.package = pkgs.nix-ld-rs;
       });
-      dkrs = ({
-        security.pki.certificateFiles = [ /etc/ssl/certs/certs.crt ];
-        networking.proxy.default = "http://tyo4.sme.zscaler.net:80";
-        networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-      });
     in
     {
       wsl = inputs.nixos.lib.nixosSystem {
         system = x86linux;
         specialArgs = { nixos-wsl = inputs.nixos-wsl; };
         modules = [ conf wslc ];
+      };
+      wsldkr = inputs.nixos.lib.nixosSystem {
+        system = x86linux;
+        specialArgs = { nixos-wsl = inputs.nixos-wsl; };
+        modules = [ conf wslc inputs.certs.nixosModules.dkrc ];
       };
     };
 
@@ -96,6 +102,10 @@
       files = ({
         xdg.configFile."nvim" = {
           source = ./nvim;
+          recursive = true;
+        };
+        xdg.configFile."git" = {
+          source = ./git;
           recursive = true;
         };
       });
