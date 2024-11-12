@@ -27,6 +27,20 @@
     # System-wide Configurations
     nixosConfigurations =
     let
+      lenovo = ({ config, lib, pkgs, modulesPath, ... }: {
+        imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+        boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" ];
+        boot.initrd.kernelModules = [ ];
+        boot.kernelModules = [ "kvm-amd" ];
+        boot.extraModulePackages = [ ];
+        # pertision
+        fileSystems."/" = { device = "/dev/disk/by-uuid/3f968628-81c7-426f-85b4-8519905999b9"; fsType = "ext4"; };
+        fileSystems."/boot" = { device = "/dev/disk/by-uuid/A80E-82B4"; fsType = "vfat"; options = [ "fmask=0022" "dmask=0022" ]; };
+        swapDevices = [ { device = "/swapfile"; size = 2*1024; } ];
+        networking.useDHCP = lib.mkDefault true;
+        nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+        hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+      });
       conf = ({ config, pkgs, lib, ... }: {
         time.timeZone = "Asia/Tokyo";
         networking.hostName = "Astrolabe";
@@ -35,6 +49,54 @@
         system.stateVersion = ver;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
+        boot.loader.systemd-boot.enable = true;
+        boot.loader.efi.canTouchEfiVariables = true;
+        console.useXkbConfig = true;
+        networking.networkmanager.enable = true;
+        i18n.defaultLocale = "en_US.UTF-8";
+        fonts = {
+          packages = with pkgs; [
+            noto-fonts
+            noto-fonts-cjk
+            noto-fonts-extra
+            noto-fonts-emoji
+            monaspace
+            fira-code-nerdfont
+          ];
+        };
+        # Enable RealTimeKit
+        security.rtkit.enable = true;
+        # Enable sound with pipewire.
+        sound.enable = true;
+        hardware.pulseaudio.enable = false;
+        hardware.bluetooth.enable = true;
+        services = {
+          # Enable the OpenSSH daemon.
+          openssh.enable = true;
+
+          xserver = {
+            enable = true;
+            # Configure desktop environment
+            displayManager.gdm.enable = true;
+            desktopManager.gnome.enable = true;.
+            # Configure keymap in X11
+            xkb = {
+              layout = "jp";
+              variant = "";
+              options = "ctrl:nocaps";
+            };
+          };
+          libinput.enable = true;
+          # Enable CUPS to print documents.
+          printing.enable = true;
+          pipewire = {
+            enable = true;
+            alsa.enable = true;
+            alsa.support32Bit = true;
+            pulse.enable = true;
+          };
+        };
+        nixpkgs.config.allowUnfree = true;
         virtualisation.docker.enable = true;
       });
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
@@ -79,7 +141,6 @@
             enable = true;
             withNodeJs = true;
           };
-          git-credential-oauth.enable = true;
           tmux = {
             enable = true;
             shell = "${pkgs.powershell}/bin/pwsh";
