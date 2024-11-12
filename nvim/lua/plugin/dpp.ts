@@ -6,8 +6,6 @@ import {
 } from "https://deno.land/x/dpp_vim@v1.0.0/types.ts";
 import { Denops, fn } from "https://deno.land/x/dpp_vim@v1.0.0/deps.ts";
 
-console.log("dpp.ts is loaded!");
-
 export class Config extends BaseConfig {
   override async config(args: {
     denops: Denops;
@@ -34,7 +32,7 @@ export class Config extends BaseConfig {
     };
 
     const [context, options] = await args.contextBuilder.get(args.denops);
-    const dotfilesDir = "~/.config/nvim/";
+    const dotfilesDir = "~/.config/nvim/lua/plugin/";
 
     const tomls: Toml[] = [];
 
@@ -49,7 +47,6 @@ export class Config extends BaseConfig {
     ];
 
     const toml_promises = toml_files.map(async (toml) => {
-      console.log(toml);
       tomls.push(
         await args.dpp.extAction(
           args.denops,
@@ -103,12 +100,6 @@ export class Config extends BaseConfig {
         plugins: Object.values(recordPlugins),
       },
     ) as LazyMakeStateResult;
-
-    // console.log(Object.values(recordPlugins));
-    console.log({
-      plugins: lazyResult.plugins,
-      stateLines: lazyResult.stateLines,
-    });
 
     return {
       plugins: lazyResult.plugins,
