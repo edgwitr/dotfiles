@@ -1,4 +1,4 @@
-local dpp_base = vim.fn.stdpath("cache") .. "/dpp/"
+local dpp_base = vim.fn.stdpath("cache") .. "/dpp"
 
 vim.notify(dpp_base, vim.log.levels.INFO)
 
