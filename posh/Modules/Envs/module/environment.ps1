@@ -7,3 +7,4 @@ $Env:XDG_CONFIG_HOME = "$Env:USERPROFILE/.config"
 
 $Env:RUSTUP_HOME = "$Env:USERPROFILE/.local/rustup"
 $Env:CARGO_HOME = "$Env:USERPROFILE/.local/cargo"
+$Env:GOPATH = "$Env:USERPROFILE/.local/go"
