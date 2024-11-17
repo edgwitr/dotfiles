@@ -8,6 +8,10 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -78,7 +82,7 @@
             enable = true;
             # Configure desktop environment
             displayManager.gdm.enable = true;
-            desktopManager.gnome.enable = true;.
+            desktopManager.gnome.enable = true;
             # Configure keymap in X11
             xkb = {
               layout = "jp";
@@ -117,6 +121,59 @@
         system = x86linux;
         specialArgs = { nixos-wsl = inputs.nixos-wsl; };
         modules = [ conf wslc inputs.certs.nixosModules.dkrc ];
+      };
+    };
+
+    darwinConfigurations =
+    let
+    in
+    {
+      mini = inputs.nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+        ({
+          nixpkgs.config.allowUnfree = true;
+          nix.settings.experimental-features = [ "nix-command" "flakes" ];
+          time.timeZone = "Asia/Tokyo";
+          networking.hostName = "Nocturlabe";
+          system = {
+            stateVersion = 5;
+            defaults = {
+              NSGlobalDomain = {
+                AppleInterfaceStyle = "Dark";
+                NSAutomaticCapitalizationEnabled = false;
+                NSAutomaticPeriodSubstitutionEnabled = false;
+                NSAutomaticQuoteSubstitutionEnabled = false;
+                NSAutomaticSpellingCorrectionEnabled = false;
+                NSTextShowsControlCharacters = true;
+              };
+              finder = {
+                AppleShowAllFiles = true;
+                AppleShowAllExtensions = true;
+                FXRemoveOldTrashItems = true;
+                NewWindowTarget = "Home";
+                ShowPathbar = true;
+              };
+              dock = {
+                autohide = true;
+                orientation = "bottom";
+                mineffect = "scale";
+              };
+            };
+          };
+          homebrew = {
+            enable = true;
+            onActivation = {
+              autoUpdate = true;
+              cleanup = "uninstall";
+            };
+            casks = [
+              "karabiner-elements"
+              "chatgpt"
+            ];
+          };
+        })
+        ];
       };
     };
 
