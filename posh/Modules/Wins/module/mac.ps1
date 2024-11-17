@@ -9,7 +9,7 @@ function Set-Macenv {
     }
     $keyPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
     $keyName = "Scancode Map"
-    $ahkPath = Join-Path -Path [Environment]::GetFolderPath('Startup') -ChildPath "adapt.ahk"
+    $ahkPath = Join-Path -Path ([Environment]::GetFolderPath('Startup')) -ChildPath "adapt.ahk"
     $ahkValue = "$env:USERPROFILE\.local\dotfiles\bin\adapt.ahk"
 
     if ($Restore) {
