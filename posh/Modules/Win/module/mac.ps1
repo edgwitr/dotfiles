@@ -1,4 +1,3 @@
-if (!($PSVersionTable.PSEdition -eq "Desktop" -or $IsWindows -eq $true)) { return }
 function Set-Macenv {
     param(
         [Parameter()][switch]$Restore
