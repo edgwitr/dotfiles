@@ -10,7 +10,7 @@ if not vim.loop.fs_stat(dpp_src) then
 	vim.fn.system({
 		"git",
 		"clone",
-		"https://github.com/Shougo/dpp.vim.git",
+		"git@github.com:Shougo/dpp.vim.git",
 		dpp_src
 	})
 end
@@ -21,7 +21,7 @@ if not vim.loop.fs_stat(denops_src) then
 	vim.fn.system({
 		"git",
 		"clone",
-		"https://github.com/vim-denops/denops.vim.git",
+		"git@github.com:vim-denops/denops.vim.git",
 		denops_src
 	})
 end
@@ -33,7 +33,7 @@ if not vim.loop.fs_stat(ext_toml) then
 	vim.fn.system({
 		"git",
 		"clone",
-		"https://github.com/Shougo/dpp-ext-toml.git",
+		"git@github.com:Shougo/dpp-ext-toml.git",
 		ext_toml
 	})
 end
@@ -44,7 +44,7 @@ if not vim.loop.fs_stat(ext_lazy) then
 	vim.fn.system({
 		"git",
 		"clone",
-		"https://github.com/Shougo/dpp-ext-lazy.git",
+		"git@github.com:Shougo/dpp-ext-lazy.git",
 		ext_lazy
 	})
 end
@@ -54,7 +54,7 @@ if not vim.loop.fs_stat(ext_installer) then
 	vim.fn.system({
 		"git",
 		"clone",
-		"https://github.com/Shougo/dpp-ext-installer.git",
+		"git@github.com:Shougo/dpp-ext-installer.git",
 		ext_installer
 	})
 end
@@ -65,7 +65,7 @@ if not vim.loop.fs_stat(ext_git) then
 	vim.fn.system({
 		"git",
 		"clone",
-		"https://github.com/Shougo/dpp-protocol-git.git",
+		"git@github.com:Shougo/dpp-protocol-git.git",
 		ext_git
 	})
 end
