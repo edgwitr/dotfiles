@@ -1,8 +1,8 @@
 #SingleInstance Force
 
 ; mouse
-WheelUp::WheelDown
-WheelDown::WheelUp
+; ^WheelUp::WheelDown
+; ^WheelDown::WheelUp
 
 ; ime
 IME_SET(SetSts, WinTitle:="A")    {
@@ -26,6 +26,8 @@ vk1D:: IME_SET(0)
 vk1C:: IME_SET(1)
 
 ; Caps -> F13(^)
+#HotIf WinActive("ahk_exe Alacritty.exe")
+    F13::Ctrl
 #HotIf !WinActive("ahk_exe Alacritty.exe")
     F13 & b:: Left
     F13 & f:: Right
@@ -35,14 +37,12 @@ vk1C:: IME_SET(1)
     F13 & e:: End
     F13 & h:: BackSpace
     F13 & m:: Send "`r"
-    #HotIf GetKeyState("F13", "P")
-        !p:: Send "^{Up}"
-        !n:: Send "^{Down}"
-        !b:: Send "^{Left}"
-        !f:: Send "^{Right}"
-        ^h:: MsgBox "hoge"
-        ^r:: Reload
-        ^k:: KeyHistory
-#HotIf WinActive("ahk_exe Alacritty.exe")
-    F13::Ctrl
+#HotIf (!WinActive("ahk_exe Alacritty.exe") and GetKeyState("F13", "P"))
+    !p:: Send "^{Up}"
+    !n:: Send "^{Down}"
+    !b:: Send "^{Left}"
+    !f:: Send "^{Right}"
+    ^h:: MsgBox "hoge"
+    ^r:: Reload
+    ^k:: KeyHistory
 #HotIf

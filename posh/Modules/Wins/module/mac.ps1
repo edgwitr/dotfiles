@@ -9,10 +9,12 @@ function Set-Macenv {
     }
     $keyPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Keyboard Layout"
     $keyName = "Scancode Map"
+    $mouseValue = 1
     $ahkPath = Join-Path -Path ([Environment]::GetFolderPath('Startup')) -ChildPath "adapt.ahk"
     $ahkValue = "$env:USERPROFILE\.local\dotfiles\bin\adapt.ahk"
 
     if ($Restore) {
+        $mouseValue = 0
         # remove-keymap
         if (Get-ItemProperty -Path $keyPath -Name $keyName -ErrorAction SilentlyContinue) {
             Remove-ItemProperty -Path $keyPath -Name $keyName
@@ -47,6 +49,14 @@ function Set-Macenv {
             New-Item -ItemType SymbolicLink -Target $ahkValue -Path $ahkPath
             Write-Output "Create sym-link"
         }
+    }
+
+    # Get all mouse devices
+    Get-PnpDevice -Class Mouse | Where-Object { $_.Status -eq "OK" } | ForEach-Object {
+        $deviceID = $_.DeviceID
+        $fpath = "HKLM:\SYSTEM\CurrentControlSet\Enum\$deviceID\Device Parameters"
+        Set-ItemProperty -Path $fpath -Name "FlipFlopWheel" -Value $mouseValue
+        Write-Output "Changed wheel direction for device '$($_.Name)'"
     }
 
     $response = Read-Host "Reboot? [Y/N]"
