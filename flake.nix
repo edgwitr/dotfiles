@@ -131,11 +131,14 @@
       mini = inputs.nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
-        ({
+        ({ config, pkgs, lib, ... }: {
           nixpkgs.config.allowUnfree = true;
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
           time.timeZone = "Asia/Tokyo";
           networking.hostName = "Nocturlabe";
+          fonts.packages = with pkgs; [
+            fira-code-nerdfont
+          ];
           system = {
             stateVersion = 5;
             defaults = {
