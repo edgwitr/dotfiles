@@ -7,6 +7,12 @@ return {
   color_scheme = 'Materia (base16)',
   font_size = 13.0,
   default_prog = { "pwsh" },
-  font = wezterm.font 'UDEV Gothic 35NFLG',
+  font = wezterm.font 'FiraCode Nerd Font',
   enable_scroll_bar = true,
+  window_padding = {
+    left = 0,
+    right = 0,
+    top = 0,
+    bottom = 0,
+  }
 }

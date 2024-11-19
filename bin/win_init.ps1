@@ -13,3 +13,4 @@ New-Item -ItemType Junction -Target $posh -Path "$env:USERPROFILE\Documents\Powe
 
 New-Item -ItemType Junction -Target "$dotroot\git" -Path "$Env:USERPROFILE\.config\git"
 New-Item -ItemType Junction -Target "$dotroot\nvim" -Path "$Env:USERPROFILE\.config\nvim"
+New-Item -ItemType Junction -Target "$dotroot\wezterm" -Path "$Env:USERPROFILE\.config\wezterm"
