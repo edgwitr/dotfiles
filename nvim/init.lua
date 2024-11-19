@@ -1,3 +1,11 @@
+local local_config = vim.fn.stdpath("config") .. "/local.lua"
+local file = io.open(local_config, "r")
+
+if file then
+  io.close(file)
+  dofile(local_config)
+end
+
 require("plugin/dpp")
 
 -- denops shared server
