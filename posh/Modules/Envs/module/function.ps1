@@ -22,4 +22,3 @@ function touch ([string]$fPath) {
         (Get-Item -Path $fPath).LastWriteTime = Get-Date
     }
 }
-
