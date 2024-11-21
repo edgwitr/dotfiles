@@ -4,11 +4,9 @@ return {
   initial_rows = 36,
   initial_cols = 120,
   hide_tab_bar_if_only_one_tab = true,
-  color_scheme = "Campbell",
   font_size = 13.0,
   default_prog = { "pwsh" },
-  font = wezterm.font("MonaspiceNe Nerd Font", {weight="Regular", stretch="Normal"}),
-  adjust_window_size_when_changing_font_size = false,
+  font = wezterm.font "MonaspiceNe Nerd Font",
   enable_scroll_bar = true,
   window_padding = {
     left = 0,
