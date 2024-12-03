@@ -43,14 +43,17 @@
         fileSystems."/boot" = { device = "/dev/disk/by-uuid/A80E-82B4"; fsType = "vfat"; options = [ "fmask=0022" "dmask=0022" ]; };
         swapDevices = [ { device = "/swapfile"; size = 2*1024; } ];
         networking.useDHCP = lib.mkDefault true;
-        nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+        nixpkgs.hostPlatform = lib.mkDefault x86linux;
         hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
       });
       conf = ({ config, pkgs, lib, ... }: {
         time.timeZone = "Asia/Tokyo";
         networking.hostName = "Astrolabe";
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
-        security.sudo.wheelNeedsPassword = true;
+        security.sudo = {
+          enable = true;
+          wheelNeedsPassword = true;
+        };
         system.stateVersion = ver;
         users.users.edgwitr = {
           isNormalUser = true;
