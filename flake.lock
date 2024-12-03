@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1733192631,
-        "narHash": "sha256-7ohGYjgf9LbTi/cuyDqi9vwCvgxrYpphC45tnO0i2F0=",
+        "lastModified": 1733206777,
+        "narHash": "sha256-7gqrJ7G5HwrX0BczRPg2N0ONhRxVi4f0Q0srMBpY0hA=",
         "ref": "refs/heads/main",
-        "rev": "559920b5f3a9fa7d14461e4c2b3dfadd0e533e28",
-        "revCount": 11,
+        "rev": "90fcc1f6d036652a484347eefc1280e43db43787",
+        "revCount": 14,
         "type": "git",
         "url": "ssh://git@github.com/edgwitr/certs"
       },
@@ -134,11 +134,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1733064805,
-        "narHash": "sha256-7NbtSLfZO0q7MXPl5hzA0sbVJt6pWxxtGWbaVUDDmjs=",
+        "lastModified": 1733097829,
+        "narHash": "sha256-9hbb1rqGelllb4kVUCZ307G2k3/UhmA8PPGBoyuWaSw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "31d66ae40417bb13765b0ad75dd200400e98de84",
+        "rev": "2c15aa59df0017ca140d9ba302412298ab4bf22a",
         "type": "github"
       },
       "original": {

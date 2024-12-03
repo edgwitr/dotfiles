@@ -54,6 +54,7 @@
           enable = true;
           wheelNeedsPassword = true;
         };
+        services.openssh.enable = true;
         system.stateVersion = ver;
         users.users."{$myname}" = {
           isNormalUser = true;
