@@ -57,7 +57,7 @@
         };
         services.openssh.enable = true;
         system.stateVersion = ver;
-        users.users."{$myname}" = {
+        users.users."${myname}" = {
           isNormalUser = true;
           extraGroups = [ "networkmanager" "wheel" ];
         };
@@ -205,15 +205,15 @@
       nos = ({
         home = rec {
           stateVersion = ver;
-          username = "edgwitr";
-          homeDirectory = "/home/${username}";
+          username = "${myname}";
+          homeDirectory = "/home/${myname}";
         };
       });
       edg = ({
         home = rec {
           stateVersion = ver;
-          username = "edgwitr";
-          homeDirectory = "/Users/${username}";
+          username = "${myname}";
+          homeDirectory = "/Users/${myname}";
         };
       });
       pg = ({ pkgs, ... }: {
