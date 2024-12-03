@@ -39,3 +39,6 @@
 
 [ghq]
     root = ~/.local/share/ghq
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/

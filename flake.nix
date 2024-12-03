@@ -24,7 +24,8 @@
 
   outputs = inputs: 
   let
-    ver = "24.05";
+    myname = "edgwitr";
+    ver = "24.11";
     x86linux = "x86_64-linux";
     armmac = "aarch64-darwin";
   in
@@ -43,15 +44,24 @@
         fileSystems."/boot" = { device = "/dev/disk/by-uuid/A80E-82B4"; fsType = "vfat"; options = [ "fmask=0022" "dmask=0022" ]; };
         swapDevices = [ { device = "/swapfile"; size = 2*1024; } ];
         networking.useDHCP = lib.mkDefault true;
-        nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+        nixpkgs.hostPlatform = lib.mkDefault x86linux;
         hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
       });
       conf = ({ config, pkgs, lib, ... }: {
         time.timeZone = "Asia/Tokyo";
         networking.hostName = "Astrolabe";
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
-        security.sudo.wheelNeedsPassword = true;
+        security.sudo = {
+          enable = true;
+          wheelNeedsPassword = true;
+        };
+        services.openssh.enable = true;
         system.stateVersion = ver;
+        users.users."{$myname}" = {
+          isNormalUser = true;
+          extraGroups = [ "networkmanager" "wheel" ];
+        };
+        virtualisation.docker.enable = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
         boot.loader.systemd-boot.enable = true;
@@ -101,12 +111,17 @@
           };
         };
         nixpkgs.config.allowUnfree = true;
-        virtualisation.docker.enable = true;
       });
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
         imports = [ nixos-wsl.nixosModules.wsl ];
-        wsl.enable = true;
-        wsl.wslConf.interop.appendWindowsPath = false;
+        wsl = {
+          enable = true;
+          defaultUser = myname;
+          wslConf = {
+            interop.appendWindowsPath = false;
+            boot.systemd = true;
+          };
+        };
         programs.nix-ld.enable = true;
         programs.nix-ld.package = pkgs.nix-ld-rs;
       });
@@ -190,7 +205,7 @@
       nos = ({
         home = rec {
           stateVersion = ver;
-          username = "nixos";
+          username = "edgwitr";
           homeDirectory = "/home/${username}";
         };
       });
