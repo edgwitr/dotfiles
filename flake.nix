@@ -201,7 +201,7 @@
       no = ({
         home = rec {
           stateVersion = ver;
-          username = "nixos";
+          username = "edgwitr";
           homeDirectory = "/home/${username}";
         };
       });
