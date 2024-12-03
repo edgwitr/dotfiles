@@ -60,6 +60,7 @@
           hashedPassword = "$y$j9T$7a6rWTqEKIb57XPtoRHyR1$k0Nv7GNLtCss/C.pjR8Wz9RUQdlW4m5cFwNCTSgczK8";
           extraGroups = [ "networkmanager" "wheel" ];
         };
+        virtualisation.docker.enable = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
         boot.loader.systemd-boot.enable = true;
@@ -110,7 +111,6 @@
           };
         };
         nixpkgs.config.allowUnfree = true;
-        virtualisation.docker.enable = true;
       });
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
         imports = [ nixos-wsl.nixosModules.wsl ];
