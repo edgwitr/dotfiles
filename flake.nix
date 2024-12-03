@@ -57,7 +57,7 @@
         system.stateVersion = ver;
         users.users."{$myname}" = {
           isNormalUser = true;
-          hashedPassword = "$y$j9T$hty8Mh9VEnozK5JPIVemB.$7cGan4b4OKJcOugaqWVqTEF9E5UNDC3TCmyilA3fIr6";
+          hashedPassword = "$y$j9T$7a6rWTqEKIb57XPtoRHyR1$k0Nv7GNLtCss/C.pjR8Wz9RUQdlW4m5cFwNCTSgczK8";
           extraGroups = [ "networkmanager" "wheel" ];
         };
       });
@@ -117,7 +117,10 @@
         wsl = {
           enable = true;
           defaultUser = myname;
-          wslConf.interop.appendWindowsPath = false;
+          wslConf = {
+            interop.appendWindowsPath = false;
+            boot.systemd = true;
+          };
         };
         programs.nix-ld.enable = true;
         programs.nix-ld.package = pkgs.nix-ld-rs;
