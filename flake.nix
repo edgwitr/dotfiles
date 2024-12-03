@@ -26,6 +26,7 @@
   let
     ver = "24.05";
     x86linux = "x86_64-linux";
+    armmac = "aarch64-darwin";
   in
   {
     # System-wide Configurations
@@ -64,8 +65,7 @@
             noto-fonts-cjk
             noto-fonts-extra
             noto-fonts-emoji
-            monaspace
-            fira-code-nerdfont
+            nerdfonts
           ];
         };
         # Enable RealTimeKit
@@ -129,7 +129,7 @@
     in
     {
       mini = inputs.nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
+        system = armmac;
         modules = [
         ({ config, pkgs, lib, ... }: {
           nixpkgs.config.allowUnfree = true;
@@ -137,7 +137,7 @@
           time.timeZone = "Asia/Tokyo";
           networking.hostName = "Nocturlabe";
           fonts.packages = with pkgs; [
-            fira-code-nerdfont
+            nerdfonts
           ];
           system = {
             stateVersion = 5;
@@ -171,6 +171,10 @@
               cleanup = "uninstall";
             };
             casks = [
+              "alacritty"
+              "elecom-mouse-util"
+              "visual-studio-code"
+              "discord"
               "karabiner-elements"
               "chatgpt"
             ];
@@ -183,11 +187,18 @@
     # home-manager Configurations
     homeConfigurations = 
     let
-      no = ({
+      nos = ({
         home = rec {
           stateVersion = ver;
           username = "nixos";
           homeDirectory = "/home/${username}";
+        };
+      });
+      edg = ({
+        home = rec {
+          stateVersion = ver;
+          username = "edgwitr";
+          homeDirectory = "/Users/${username}";
         };
       });
       pg = ({ pkgs, ... }: {
@@ -196,13 +207,10 @@
           home-manager.enable = true;
           fzf.enable = true;
           git.enable = true;
-          vim.enable = true;
-          neovim = {
-            enable = true;
-            withNodeJs = true;
-          };
+          neovim.enable = true;
           tmux = {
             enable = true;
+            sensibleOnTop = false;
             shell = "${pkgs.powershell}/bin/pwsh";
             extraConfig = ''
               ${builtins.readFile ./tmux/tmux.conf}
@@ -214,19 +222,34 @@
         home = {
           sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
-            EDITOR = "${pkgs.vim}/bin/vim";
           };
           file = {
           };
         };
       });
-      files = ({
+      files = ({ pkgs, ... }: {
         xdg.configFile."nvim" = {
           source = ./nvim;
           recursive = true;
         };
         xdg.configFile."git" = {
           source = ./git;
+          recursive = true;
+        };
+        xdg.configFile."alacritty" = {
+          source = ./alacritty;
+          recursive = true;
+        };
+        xdg.configFile."alacritty/local.toml".text = 
+        let
+          tmux = "${pkgs.tmux}/bin/tmux";
+        in
+        ''
+          [terminal]
+          shell = { program = "sh", args = [ "-c", "${tmux} attach || ${tmux}" ] }
+        '';
+        xdg.configFile."posh" = {
+          source = ./posh;
           recursive = true;
         };
       });
@@ -267,7 +290,15 @@
           config.allowUnfree = true;
         };
         extraSpecialArgs = { inherit inputs; };
-        modules = [ no pg env files ];
+        modules = [ nos pg env files ];
+      };
+      mac = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs {
+          system = armmac;
+          config.allowUnfree = true;
+        };
+        extraSpecialArgs = { inherit inputs; };
+        modules = [ edg pg env files ];
       };
     };
 

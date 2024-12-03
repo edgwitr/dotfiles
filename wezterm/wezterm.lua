@@ -4,7 +4,7 @@ return {
   initial_rows = 36,
   initial_cols = 120,
   hide_tab_bar_if_only_one_tab = true,
-  font_size = 13.0,
+  font_size = 14.0,
   default_prog = { "pwsh" },
   font = wezterm.font "MonaspiceNe Nerd Font",
   enable_scroll_bar = true,

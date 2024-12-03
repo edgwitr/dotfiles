@@ -1,0 +1,12 @@
+[general]
+import = [
+  "local.toml"
+]
+
+[window]
+dimensions = { columns = 150, lines = 50 }
+
+[font]
+size = 14
+normal = { family = "MonaspiceNe NF", style = "Regular" }
+
