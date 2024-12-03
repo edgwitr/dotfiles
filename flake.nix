@@ -57,7 +57,7 @@
         system.stateVersion = ver;
         users.users."{$myname}" = {
           isNormalUser = true;
-          hashedPassword = "$y$j9T$7a6rWTqEKIb57XPtoRHyR1$k0Nv7GNLtCss/C.pjR8Wz9RUQdlW4m5cFwNCTSgczK8";
+          hashedPassword = "$6$hKUISAMLemSlxJyo$SHVJXTL0f0gmuyBT9jZf/sYoIiu99pXSemQhgUMejwigTn0jalcEBrtRwJeKDCnD0RBbxgsSKPms7X1N3RiIt/";
           extraGroups = [ "networkmanager" "wheel" ];
         };
         virtualisation.docker.enable = true;
