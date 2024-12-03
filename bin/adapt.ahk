@@ -38,6 +38,11 @@ Enter:: Send "`n"
     F13 & a:: Home
     F13 & e:: End
     F13 & h:: BackSpace
+    F13 & j:: F6
+    F13 & k:: F7
+    F13 & l:: F9
+    F13 & `;:: F8
+    F13 & SC028:: F10
     F13 & m:: Send "`r"
 #HotIf
 #HotIf (!WinActive("ahk_exe alacritty.exe") and GetKeyState("F13", "P"))
