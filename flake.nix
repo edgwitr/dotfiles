@@ -24,7 +24,8 @@
 
   outputs = inputs: 
   let
-    ver = "24.05";
+    myname = "edgwitr";
+    ver = "24.11";
     x86linux = "x86_64-linux";
   in
   {
@@ -51,6 +52,10 @@
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
         security.sudo.wheelNeedsPassword = true;
         system.stateVersion = ver;
+        users.users.edgwitr = {
+          isNormalUser = true;
+          extraGroups = [ "networkmanager" "wheel" ];
+        };
       });
       lnxc = ({ config, pkgs, lib, ... }: {
         boot.loader.systemd-boot.enable = true;
@@ -105,8 +110,11 @@
       });
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
         imports = [ nixos-wsl.nixosModules.wsl ];
-        wsl.enable = true;
-        wsl.wslConf.interop.appendWindowsPath = false;
+        wsl = {
+          enable = true;
+          defaultUser = myname;
+          wslConf.interop.appendWindowsPath = false;
+        };
         programs.nix-ld.enable = true;
         programs.nix-ld.package = pkgs.nix-ld-rs;
       });
