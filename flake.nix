@@ -54,6 +54,7 @@
         system.stateVersion = ver;
         users.users.edgwitr = {
           isNormalUser = true;
+          hashedPassword = "$y$j9T$hty8Mh9VEnozK5JPIVemB.$7cGan4b4OKJcOugaqWVqTEF9E5UNDC3TCmyilA3fIr6";
           extraGroups = [ "networkmanager" "wheel" ];
         };
       });
