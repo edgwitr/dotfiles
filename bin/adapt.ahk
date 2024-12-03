@@ -24,11 +24,13 @@ IME_SET(SetSts, WinTitle:="A")    {
 
 vk1D:: IME_SET(0)
 vk1C:: IME_SET(1)
+Enter:: Send "`n"
 
 ; Caps -> F13(^)
-#HotIf WinActive("ahk_class org.wezfurlong.wezterm")
+#HotIf WinActive("ahk_exe alacritty.exe")
     F13::Ctrl
-#HotIf !WinActive("ahk_class org.wezfurlong.wezterm")
+#HotIf
+#HotIf !WinActive("ahk_exe alacritty.exe")
     F13 & b:: Left
     F13 & f:: Right
     F13 & p:: Up
@@ -37,7 +39,8 @@ vk1C:: IME_SET(1)
     F13 & e:: End
     F13 & h:: BackSpace
     F13 & m:: Send "`r"
-#HotIf (!WinActive("ahk_class org.wezfurlong.wezterm") and GetKeyState("F13", "P"))
+#HotIf
+#HotIf (!WinActive("ahk_exe alacritty.exe") and GetKeyState("F13", "P"))
     !p:: Send "^{Up}"
     !n:: Send "^{Down}"
     !b:: Send "^{Left}"
