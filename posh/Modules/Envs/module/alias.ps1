@@ -1,4 +1,4 @@
-Set-Alias grep Select-String
+﻿Set-Alias grep Select-String
 
 Set-Abbr gst 'git status'
 Set-Abbr gcom 'git commit -m "%"' -NoSpaceAfter

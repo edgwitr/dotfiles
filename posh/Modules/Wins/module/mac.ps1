@@ -1,4 +1,4 @@
-function Set-Macenv {
+﻿function Set-Macenv {
     param(
         [Parameter()][switch]$Restore
     )

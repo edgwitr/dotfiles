@@ -1,4 +1,4 @@
-# no arguments function
+﻿# no arguments function
 function functions {
     Get-ChildItem function:
 }

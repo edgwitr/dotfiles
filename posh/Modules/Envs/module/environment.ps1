@@ -1,4 +1,4 @@
-$env:LANG = "en_US.UTF-8"
+﻿$env:LANG = "en_US.UTF-8"
 [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 $Env:XDG_CACHE_HOME = "$Env:USERPROFILE/.cache"
 $Env:XDG_STATE_HOME = "$Env:USERPROFILE/.local/state"

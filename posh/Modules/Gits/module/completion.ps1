@@ -1,4 +1,4 @@
-Register-ArgumentCompleter -CommandName git -ScriptBlock {
+﻿Register-ArgumentCompleter -CommandName git -ScriptBlock {
   param(
     [String]$wordToComplete, 
     [System.Management.Automation.Language.CommandAst]$commandAst,

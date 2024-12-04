@@ -1,4 +1,4 @@
-if (!($PSVersionTable.PSEdition -eq "Desktop" -or $IsWindows -eq $true)) { return }
+﻿if (!($PSVersionTable.PSEdition -eq "Desktop" -or $IsWindows -eq $true)) { return }
 
 mkdir -p "$Env:USERPROFILE\.cache"
 mkdir -p "$Env:USERPROFILE\.config"
@@ -14,3 +14,4 @@ New-Item -ItemType Junction -Target $posh -Path "$env:USERPROFILE\Documents\Powe
 New-Item -ItemType Junction -Target "$dotroot\git" -Path "$Env:USERPROFILE\.config\git"
 New-Item -ItemType Junction -Target "$dotroot\nvim" -Path "$Env:USERPROFILE\.config\nvim"
 New-Item -ItemType Junction -Target "$dotroot\wezterm" -Path "$Env:USERPROFILE\.config\wezterm"
+New-Item -ItemType Junction -Target "$dotroot\alacritty" -Path "$Env:APPDATA\alacritty"
