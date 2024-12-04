@@ -209,7 +209,7 @@
           homeDirectory = "/home/${myname}";
         };
       });
-      edg = ({
+      mac = ({
         home = rec {
           stateVersion = ver;
           username = "${myname}";
@@ -241,31 +241,36 @@
           file = {
           };
         };
-      });
-      files = ({ pkgs, ... }: {
-        xdg.configFile."nvim" = {
-          source = ./nvim;
-          recursive = true;
+        xdg.dataFile = {
+          "powershell/Modules" = {
+            source = ./posh/Modules;
+            recursive = true;
+          };
         };
-        xdg.configFile."git" = {
-          source = ./git;
-          recursive = true;
-        };
-        xdg.configFile."alacritty" = {
-          source = ./alacritty;
-          recursive = true;
-        };
-        xdg.configFile."alacritty/local.toml".text = 
-        let
-          tmux = "${pkgs.tmux}/bin/tmux";
-        in
-        ''
-          [terminal]
-          shell = { program = "sh", args = [ "-c", "${tmux} attach || ${tmux}" ] }
-        '';
-        xdg.configFile."posh" = {
-          source = ./posh;
-          recursive = true;
+        xdg.configFile = {
+          "powershell/Microsoft.PowerShell_profile.ps1" = {
+            source = ./posh/Microsoft.PowerShell_profile.ps1;
+          };
+          "nvim" = {
+            source = ./nvim;
+            recursive = true;
+          };
+          "git" = {
+            source = ./git;
+            recursive = true;
+          };
+          "alacritty" = {
+            source = ./alacritty;
+            recursive = true;
+          };
+          "alacritty/local.toml".text = 
+          let
+            tmux = "${pkgs.tmux}/bin/tmux";
+          in
+          ''
+            [terminal]
+            shell = { program = "sh", args = [ "-c", "${tmux} attach || ${tmux}" ] }
+          '';
         };
       });
       linux = ({ pkgs, ...}: {
@@ -305,7 +310,7 @@
           config.allowUnfree = true;
         };
         extraSpecialArgs = { inherit inputs; };
-        modules = [ nos pg env files ];
+        modules = [ nos pg env ];
       };
       mac = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
@@ -313,7 +318,7 @@
           config.allowUnfree = true;
         };
         extraSpecialArgs = { inherit inputs; };
-        modules = [ edg pg env files ];
+        modules = [ mac pg env ];
       };
     };
 
