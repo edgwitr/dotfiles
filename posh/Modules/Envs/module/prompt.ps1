@@ -1,4 +1,6 @@
-﻿function Get-GitBranch {
+﻿$gitfile = Join-Path -Path $HOME -ChildPath ".cache/gitstatus.json"
+$gitLatestUpdate = Get-Date
+function Get-GitBranch {
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
     if (Test-Path "$currentPath/.git") {
@@ -10,9 +12,9 @@
       if (Test-Path $headPath) {
         $branchRef = Get-Content $headPath
         if ($branchRef -match "ref: refs/heads/(.+)") {
-          return $matches[1]
+          return "[$($matches[1])]"
         } else {
-          return "detached HEAD at $branchRef"
+          return "*$branchRef*"
         }
       } else {
         return "Error: .git/HEAD not found or unreadable"
@@ -22,19 +24,60 @@
   }
 }
 
-$gitfile = Join-Path -Path $HOME -ChildPath ".cache/gitstatus.txt"
-
 function Write-GitStatusAsync {
+  if ((Get-Date).AddSeconds(-1) -lt $gitLatestUpdate) {
+    return
+  } else {
+    $gitLatestUpdate = Get-Date
+  }
   $scriptBlock = {
       param($currentLocation, $targetPath)
       Set-Location $currentLocation
-      (git status --porcelain 2> $null) > $targetPath
+      $gitInfo = @{
+        "status" = (git status --porcelain --branch 2> $null) -Split "`n"
+        "stash" = (git stash list 2> $null) -Split "`n"
+      }
+      $gitInfo | ConvertTo-Json > $targetPath
   }
 
   $ps = [PowerShell]::Create()
   $ps.AddScript($scriptBlock).AddArgument((Get-Location).Path).AddArgument($gitfile) > $null
 
-  $asyncResult = $ps.BeginInvoke()
+  $ps.BeginInvoke() > $null
+}
+
+function GitStatusConvert {
+  param($status)
+  $sign = [ordered]@{}
+  if ($status.status[0] -match "behind") {
+    $sign.Add("<","0")
+  } elseif ($status.status[0] -match "ahead") {
+    $sign.Add(">","0")
+  }
+
+  $addsign = {
+    param($sign, $statusString, $mark, $matchString)
+    if (-not $sign.Contains($mark)) {
+      if ($statusString -match $matchString) {
+        $sign.Add($mark, 0)
+      }
+    }
+  }
+
+  for ($i = 1; $i -lt $status.status.count; $i++) {
+    $addsign.Invoke($sign, $status.status[$i], "?", "^\?\? ")
+    $addsign.Invoke($sign, $status.status[$i], "+", "^[MA][ MTD] ")
+    $addsign.Invoke($sign, $status.status[$i], "!", "^[ MTARC]M ")
+    $addsign.Invoke($sign, $status.status[$i], "x", "^[ MTARC]D ")
+    $addsign.Invoke($sign, $status.status[$i], "»", "^R[ MTD] ")
+    $addsign.Invoke($sign, $status.status[$i], "X", "^D  ")
+    $addsign.Invoke($sign, $status.status[$i], "=", "^UU ")
+  }
+  if ($status.stash.count -gt 0) {
+    $sign.Add("`${$($status.stash.count)}","0")
+  }
+  $result = $sign.Keys -Join ""
+  return $result
 }
 
 function prompt {
@@ -49,8 +92,8 @@ function prompt {
     Write-Host " $gst" -NoNewline -ForegroundColor Yellow
     Write-GitStatusAsync
     if (Test-Path $gitfile) {
-      $gitstatus = Get-Content $gitfile
-      Write-Host " $gitstatus" -NoNewline -ForegroundColor Red
+      $gitstatus = GitStatusConvert (Get-Content $gitfile | ConvertFrom-Json)
+      Write-Host " ($gitstatus)" -NoNewline -ForegroundColor Magenta
     }
   } else {
     Remove-Item $gitfile
@@ -66,7 +109,7 @@ function prompt {
     $isAdmin = $env:USER -eq "root"
   }
   if ($isAdmin) {
-    Write-Host "#" -NoNewline -ForegroundColor Yellow
+    Write-Host "[#]" -NoNewline -ForegroundColor Red
   } else {
     Write-Host "$" -NoNewline
   }
