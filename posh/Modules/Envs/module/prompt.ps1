@@ -20,7 +20,7 @@ function Get-GitBranch {
         return "Error: .git/HEAD not found or unreadable"
       }
     }
-    $currentPath = Split-Path -Path $currentPath -Parent
+    $currentPath = [System.IO.Path]::GetDirectoryName($currentPath)
   }
 }
 
