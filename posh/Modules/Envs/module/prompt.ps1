@@ -48,6 +48,11 @@ function Write-GitStatusAsync {
 
 function GitStatusConvert {
   param($status)
+  if ($status) {
+    $status = $status | ConvertFrom-Json
+  } else {
+    return ""
+  }
   $sign = [ordered]@{}
   if ($status.status[0] -match "behind") {
     $sign.Add("<","0")
@@ -92,8 +97,10 @@ function prompt {
     Write-Host " $gst" -NoNewline -ForegroundColor Yellow
     Write-GitStatusAsync
     if (Test-Path $gitfile) {
-      $gitstatus = GitStatusConvert (Get-Content $gitfile | ConvertFrom-Json)
-      Write-Host " ($gitstatus)" -NoNewline -ForegroundColor Magenta
+      $gitstatus = GitStatusConvert (Get-Content $gitfile)
+      if ($gitstatus) {
+        Write-Host " ($gitstatus)" -NoNewline -ForegroundColor Magenta
+      }
     }
   } else {
     Remove-Item $gitfile

@@ -17,7 +17,7 @@ function which ([string]$command,[switch][Alias("a")]$all) {
 }
 function touch ([string]$fPath) {
   if (!(Test-Path -Path $fPath)) {
-    New-Item -Path $fPath -ItemType File | Out-Null
+    New-Item -Path $fPath -ItemType File
   } else {
     (Get-Item -Path $fPath).LastWriteTime = Get-Date
   }
