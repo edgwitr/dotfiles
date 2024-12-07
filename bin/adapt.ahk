@@ -1,9 +1,5 @@
 #SingleInstance Force
 
-; mouse
-; ^WheelUp::WheelDown
-; ^WheelDown::WheelUp
-
 ; ime
 IME_SET(SetSts, WinTitle:="A")    {
     hwnd := WinExist(WinTitle)
@@ -28,6 +24,9 @@ Enter:: Send "`n"
 
 ; Caps -> F13(^)
 #HotIf WinActive("ahk_exe alacritty.exe")
+    F13::Ctrl
+#HotIf
+#HotIf WinActive("ahk_exe WindowsTerminal.exe")
     F13::Ctrl
 #HotIf
 #HotIf !WinActive("ahk_exe alacritty.exe")
