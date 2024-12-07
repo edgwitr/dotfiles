@@ -23,13 +23,11 @@ vk1C:: IME_SET(1)
 Enter:: Send "`n"
 
 ; Caps -> F13(^)
-#HotIf WinActive("ahk_exe alacritty.exe")
+#HotIf WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")
     F13::Ctrl
 #HotIf
-#HotIf WinActive("ahk_exe WindowsTerminal.exe")
-    F13::Ctrl
-#HotIf
-#HotIf !WinActive("ahk_exe alacritty.exe")
+
+#HotIf (!WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
     F13 & b:: Left
     F13 & f:: Right
     F13 & p:: Up
@@ -44,7 +42,7 @@ Enter:: Send "`n"
     F13 & SC028:: F10
     F13 & m:: Send "`r"
 #HotIf
-#HotIf (!WinActive("ahk_exe alacritty.exe") and GetKeyState("F13", "P"))
+#HotIf (!(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")) and GetKeyState("F13", "P"))
     !p:: Send "^{Up}"
     !n:: Send "^{Down}"
     !b:: Send "^{Left}"
