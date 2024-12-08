@@ -217,10 +217,14 @@
         };
       });
       pg = ({ pkgs, ... }: {
-        home.packages = with pkgs; [ devbox ghq powershell deno ];
+        home.packages = with pkgs; [
+	  devbox
+	  gh
+	  powershell
+	  deno
+	];
         programs = {
           home-manager.enable = true;
-          fzf.enable = true;
           git.enable = true;
           neovim.enable = true;
           tmux = {
@@ -269,7 +273,7 @@
           in
           ''
             [terminal]
-            shell = { program = "sh", args = [ "-c", "${tmux} attach || ${tmux}" ] }
+            shell = { program = "bash", args = [ "-c", "${tmux} attach || ${tmux}" ] }
           '';
         };
       });
