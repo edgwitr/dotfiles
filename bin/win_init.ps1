@@ -13,5 +13,6 @@ New-Item -ItemType Junction -Target $posh -Path "$env:USERPROFILE\Documents\Powe
 
 New-Item -ItemType Junction -Target "$dotroot\git" -Path "$Env:USERPROFILE\.config\git"
 New-Item -ItemType Junction -Target "$dotroot\nvim" -Path "$Env:USERPROFILE\.config\nvim"
+New-Item -ItemType Junction -Target "$dotroot\gh" -Path "$Env:USERPROFILE\.config\gh"
 New-Item -ItemType Junction -Target "$dotroot\alacritty" -Path "$Env:APPDATA\alacritty"
 New-Item -ItemType Junction -Target "$dotroot\winterm" -Path "$Env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
