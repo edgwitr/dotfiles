@@ -23,7 +23,8 @@ if ($global:osEnv -eq "linux") {
     $info | ConvertTo-Json | Out-File $sshCache
   }
 }
-$sshList = ssh-add -l 2> $null
-if ($sshList) {
-  if ($null -eq $sshList) { ssh-add }
+
+$sshAgent = Get-Process -Name ssh-agent -ErrorAction SilentlyContinue
+if ($sshAgent) {
+  if ((ssh-add -l) -eq "The agent has no identities.") { ssh-add }
 }
