@@ -217,10 +217,14 @@
         };
       });
       pg = ({ pkgs, ... }: {
-        home.packages = with pkgs; [ devbox ghq powershell deno ];
+        home.packages = with pkgs; [
+	  devbox
+	  gh
+	  powershell
+	  deno
+	];
         programs = {
           home-manager.enable = true;
-          fzf.enable = true;
           git.enable = true;
           neovim.enable = true;
           tmux = {
@@ -233,7 +237,7 @@
           };
         };
       });
-      env = ({ pkgs, ... }: {
+      env = ({ pkgs, baseshell, ... }: {
         home = {
           sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
@@ -269,7 +273,7 @@
           in
           ''
             [terminal]
-            shell = { program = "sh", args = [ "-c", "${tmux} attach || ${tmux}" ] }
+            shell = { program = "${baseshell}", args = [ "-c", "${tmux} attach || ${tmux}" ] }
           '';
         };
       });
@@ -309,7 +313,7 @@
           system = x86linux;
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs; baseshell = "bash"; };
         modules = [ nos pg env ];
       };
       mac = inputs.home-manager.lib.homeManagerConfiguration {
@@ -317,7 +321,7 @@
           system = armmac;
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs; baseshell = "zsh"; };
         modules = [ mac pg env ];
       };
     };

@@ -4,6 +4,8 @@ if ($PSVersionTable.PSEdition -eq "Desktop") {
 } else {
   if ($PSVersionTable.OS -like 'Darwin*') {
     $global:osEnv = "mac"
+  } elseif ($PSVersionTable.OS -like 'Microsoft*') {
+    $global:osEnv = "win"
   } else {
     $global:osEnv = "linux"
   }
