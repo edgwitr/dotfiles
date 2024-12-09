@@ -1,11 +1,17 @@
-﻿$global:winEnv = ($PSVersionTable.PSEdition -eq "Desktop" -or $IsWindows -eq $true)
+﻿$global:osEnv = ""
+if ($PSVersionTable.PSEdition -eq "Desktop") {
+  $global:osEnv = "win"
+} else {
+  if ($PSVersionTable.OS -like 'Darwin*') {
+    $global:osEnv = "mac"
+  } elseif ($PSVersionTable.OS -like 'Microsoft*') {
+    $global:osEnv = "win"
+  } else {
+    $global:osEnv = "linux"
+  }
+}
 Import-Module Abbr
 Import-Module Cmds
 Import-Module Cmps
 Import-Module Envs
-if ( $global:winEnv ) {
-  Import-Module Wins
-} else {
-  Import-Module Unxs
-}
 if ( Test-Path $PSScriptRoot/local.ps1 ) { . $PSScriptRoot/local.ps1 }

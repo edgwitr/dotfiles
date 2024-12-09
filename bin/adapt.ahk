@@ -40,6 +40,7 @@ Enter:: Send "`n"
     F13 & l:: F9
     F13 & `;:: F8
     F13 & SC028:: F10
+    F13 & Space:: ^Space
     F13 & m:: Send "`r"
 #HotIf
 #HotIf (!(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")) and GetKeyState("F13", "P"))

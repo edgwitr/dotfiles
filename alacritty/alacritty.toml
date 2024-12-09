@@ -1,5 +1,8 @@
 [general]
-import = ["local.toml"]
+import = [
+  "local.toml",
+  "alacritty-theme/themes/campbell.toml",
+]
 
 [window]
 dimensions = { columns = 130, lines = 40 }
