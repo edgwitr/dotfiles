@@ -27,7 +27,7 @@ Enter:: Send "`n"
     F13::Ctrl
 #HotIf
 
-#HotIf (!WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
+#HotIf !(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
     F13 & b:: Left
     F13 & f:: Right
     F13 & p:: Up
@@ -43,7 +43,7 @@ Enter:: Send "`n"
     F13 & Space:: ^Space
     F13 & m:: Send "`r"
 #HotIf
-#HotIf (!(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")) and GetKeyState("F13", "P"))
+#HotIf !(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")) and GetKeyState("F13", "P")
     !p:: Send "^{Up}"
     !n:: Send "^{Down}"
     !b:: Send "^{Left}"
