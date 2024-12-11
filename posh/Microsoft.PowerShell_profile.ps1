@@ -1,13 +1,19 @@
-﻿$global:osEnv = ""
+﻿$env:OSTYPE = ""
+$env:OSINFO = ""
 if ($PSVersionTable.PSEdition -eq "Desktop") {
-  $global:osEnv = "win"
+  $env:OSTYPE = "win"
+  $env:OSINFO = "posh"
 } else {
   if ($PSVersionTable.OS -like 'Darwin*') {
-    $global:osEnv = "mac"
+    $env:OSTYPE = "mac"
   } elseif ($PSVersionTable.OS -like 'Microsoft*') {
-    $global:osEnv = "win"
+    $env:OSTYPE = "win"
+    $env:OSINFO = "pwsh"
   } else {
-    $global:osEnv = "linux"
+    $env:OSTYPE = "linux"
+    if ($null -ne $env:WSL_DISTRO_NAME) {
+      $env:OSINFO = "wsl"
+    }
   }
 }
 Import-Module Abbr
