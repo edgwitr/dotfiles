@@ -22,12 +22,14 @@ vk1D:: IME_SET(0)
 vk1C:: IME_SET(1)
 Enter:: Send "`n"
 
-; Caps -> F13(^)
-#HotIf WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")
-    F13::Ctrl
-#HotIf
+if (WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
+    isTerminal := 1
 
-#HotIf !(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
+; Caps -> F13(^)
+#HotIf (() => isTerminal)
+    F13::Ctrl
+
+#HotIf (() => !isTerminal)
     F13 & b:: Left
     F13 & f:: Right
     F13 & p:: Up
@@ -42,8 +44,8 @@ Enter:: Send "`n"
     F13 & SC028:: F10
     F13 & Space:: ^Space
     F13 & m:: Send "`r"
-#HotIf
-#HotIf !(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")) and GetKeyState("F13", "P")
+
+#HotIf () => GetKeyState("F13", "P") and !isTerminal
     !p:: Send "^{Up}"
     !n:: Send "^{Down}"
     !b:: Send "^{Left}"
@@ -52,4 +54,3 @@ Enter:: Send "`n"
     ^r:: Reload
     ^k:: KeyHistory
     ^w:: MsgBox WinGetClass("A")
-#HotIf
