@@ -1,57 +1,67 @@
-﻿# function Get-GitRepository {
-#   [CmdletBinding()]
-#   param(
-#     [Parameter(Position=0, Mandatory=$true)]
-#     [ValidateSet(
-#       'create',
-#       'clone',
-#       'get',
-#       'list',
-#       'remove',
-#       'root'
-#     )]
-#     [string]$Command,
+﻿function Show-DirectoryTree {
+  param (
+      [string]$Path = ".",
+      [switch]$IncludeHidden = $false,
+      [switch]$IncludeFiles = $false
+  )
+  $separator = [System.IO.Path]::DirectorySeparatorChar
+  $Path = (Get-Item $Path).FullName + $separator
+  $targets = if ($IncludeHidden -and $IncludeFiles) {
+    Get-ChildItem -Path $Path -Recurse -Force
+  } elseif ($IncludeHidden) {
+    Get-ChildItem -Path $Path -Recurse -Directory -Force
+  } elseif ($IncludeFiles) {
+    Get-ChildItem -Path $Path -Recurse
+  } else {
+    Get-ChildItem -Path $Path -Recurse -Directory
+  }
+  $targets = $targets | Sort-Object FullName
 
-#     [Parameter(Position=1, ValueFromRemainingArguments=$true)]
-#     [string[]]$CommandArguments
-#   )
-#   # required commands
-#   $requiredCommands = @("gh", "git")
+  function depth ([string]$targetPath) {
+    $depth = $targetPath.Split($separator).Count - 1
+    return $depth
+  }
+  $pathDepth = depth $Path
 
-#   foreach ($cmd in $requiredCommands) {
-#     if (-not (Get-Command $cmd -ErrorAction SilentlyContinue)) {
-#       Write-Error "ERROR: '$cmd' is missing. Please install it and try again."
-#       return
-#     }
-#   }
+  $result = for ($i = 0; $i -lt $targets.Count; $i++) {
+    $current = $targets[$i].FullName
+    $currentDepth = (depth $current) - $pathDepth
+    $prefix = "  " * $currentDepth
 
-#   switch ($Command) {
-#     'create' {
-#       Write-Host "Creating new repository"
-#       # 新規リポジトリ作成処理
-#     }
-#     'clone' {
-#       Write-Host "Cloning repository: $($CommandArguments[0])"
-#       # クローン処理
-#     }
-#     'get' {
-#       Write-Host "Getting repository: $($CommandArguments[0])"
-#       # リポジトリ取得処理
-#     }
-#     'list' {
-#       Write-Host "Listing repositories"
-#       # リポジトリ一覧表示処理
-#     }
-#     'remove' {
-#       Write-Host "Removing repository: $($CommandArguments[0])"
-#       # リポジトリ削除処理
-#     }
-#     'root' {
-#       Write-Host "Showing root directory"
-#       # ルートディレクトリ表示処理
-#     }
-#     default {
-#       Write-Error "ERROR: Invalid command '$Command'."
-#     }
-#   }
-# }
+    if (-not ($i -eq $targets.Count - 1)) {
+      $next = $targets[$i + 1].FullName
+      $nextDepth = (depth $next) - $pathDepth
+
+      # echo "$currentDepth $nextDepth"
+      if ($currentDepth -eq $nextDepth) {
+        $prefix += "├─"
+      } else {
+        $prefix += "└─"
+      }
+    } else {
+      $prefix += "└─"
+    }
+
+    Write-Output "$prefix$($targets[$i].Name)"
+  }
+  # $result
+  $maxLength = $result | ForEach-Object { $_.Length } | Sort-Object -Descending | Select-Object -First 1
+  $resultArray = [System.Collections.ArrayList]::new()
+  $i = 0
+  $result | ForEach-Object { $resultArray.Add($_.ToCharArray()) | Out-Null }
+  for ($column = 0; $column -lt $maxLength; $column += 2) {
+    $startFlag = $false
+    for ($row = $result.Count; $row -gt 0; $row--) {
+      if ($resultArray[$row].Count -gt $column) {
+        if ($resultArray[$row][$column] -eq " " -and $resultArray[$row + 1][$column] -eq "└") {
+          $startFlag = $true
+        }
+        if ($startFlag) {
+          $resultArray[$row][$column] = "│"
+        }
+      }
+    }
+  }
+  $resultArray | ForEach-Object { [string]::new($_) }
+}
+

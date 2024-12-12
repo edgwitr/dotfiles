@@ -1,6 +1,6 @@
 ﻿$gitfile = Join-Path -Path $HOME -ChildPath ".cache/gitstatus.json"
 $gitLatestUpdate = Get-Date
-function Get-GitBranch {
+$gitBranch = {
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
     if (Test-Path "$currentPath/.git") {
@@ -92,9 +92,9 @@ function prompt {
   $currentPath = $currentPath -replace [regex]::Escape($HOME), '~'
   Write-Host " [$currentPath]" -NoNewline -ForegroundColor Cyan
 
-  $gst = Get-GitBranch
-  if ($gst) {
-    Write-Host " $gst" -NoNewline -ForegroundColor Yellow
+  $gbr = & $gitBranch
+  if ($gbr) {
+    Write-Host " $gbr" -NoNewline -ForegroundColor Yellow
     Write-GitStatusAsync
     if (Test-Path $gitfile) {
       $gitstatus = GitStatusConvert (Get-Content $gitfile)
