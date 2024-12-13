@@ -1,4 +1,4 @@
-if ($global:osEnv -eq "linux") {
+if ($env:OSTYPE -eq "linux") {
   $sshCache = "$HOME/.cache/ssh.json"
   if ($null -eq $env:SSH_AUTH_SOCK) {
     if (Test-Path $sshCache) {
@@ -26,5 +26,7 @@ if ($global:osEnv -eq "linux") {
 
 $sshAgent = Get-Process -Name ssh-agent -ErrorAction SilentlyContinue
 if ($sshAgent) {
-  if ((ssh-add -l) -eq "The agent has no identities.") { ssh-add }
+  if ((ssh-add -l) -eq "The agent has no identities.") {
+    ssh-add
+  }
 }
