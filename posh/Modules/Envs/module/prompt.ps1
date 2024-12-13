@@ -1,6 +1,11 @@
 ﻿$gitfile = Join-Path -Path $HOME -ChildPath ".cache/gitstatus.json"
 $gitLatestUpdate = Get-Date
-$gitBranch = {
+$GetGitBranch = {
+  # $gb = git rev-parse --short HEAD
+  # if ($gb -eq "fatal: not a git repository (or any of the parent directories): .git") {
+  #   $gb = git rev-parse --short HEAD 2> $null
+  # }
+  # return $gb
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
     if (Test-Path "$currentPath/.git") {
@@ -12,9 +17,9 @@ $gitBranch = {
       if (Test-Path $headPath) {
         $branchRef = Get-Content $headPath
         if ($branchRef -match "ref: refs/heads/(.+)") {
-          return "[$($matches[1])]"
+          return "$($matches[1])"
         } else {
-          return "*$branchRef*"
+          return "$branchRef"
         }
       } else {
         return "Error: .git/HEAD not found or unreadable"
@@ -24,7 +29,7 @@ $gitBranch = {
   }
 }
 
-function Write-GitStatusAsync {
+$WriteGitStatusAsync = {
   if ((Get-Date).AddSeconds(-1) -lt $gitLatestUpdate) {
     return
   } else {
@@ -33,11 +38,11 @@ function Write-GitStatusAsync {
   $scriptBlock = {
       param($currentLocation, $targetPath)
       Set-Location $currentLocation
-      $gitInfo = @{
+      @{
         "status" = (git status --porcelain --branch 2> $null) -Split "`n"
         "stash" = (git stash list 2> $null) -Split "`n"
-      }
-      $gitInfo | ConvertTo-Json > $targetPath
+        "hash" = (git rev-parse --short HEAD 2> $null)
+      } | ConvertTo-Json > $targetPath
   }
 
   $ps = [PowerShell]::Create()
@@ -46,7 +51,19 @@ function Write-GitStatusAsync {
   $ps.BeginInvoke() > $null
 }
 
-function GitStatusConvert {
+$ConvertGitBranch = {
+  param($status, $gbr)
+  if ($status) {
+    $status = $status | ConvertFrom-Json
+    if ($status.status[0] -eq "## HEAD (no branch)") {
+      return $status.hash
+    } else {
+      return $status.status[0]
+    }
+  }
+}
+
+$ConvertGitStatus = {
   param($status)
   if ($status) {
     $status = $status | ConvertFrom-Json
@@ -86,21 +103,24 @@ function GitStatusConvert {
 }
 
 function prompt {
-  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm")" -NoNewline -ForegroundColor Cyan
-
+  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm")" -NoNewline -ForegroundColor DarkGray
   $currentPath = $executionContext.SessionState.Path.CurrentLocation
   $currentPath = $currentPath -replace [regex]::Escape($HOME), '~'
-  Write-Host " [$currentPath]" -NoNewline -ForegroundColor Cyan
+  Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
 
-  $gbr = & $gitBranch
+  $gbr = & $GetGitBranch
   if ($gbr) {
-    Write-Host " $gbr" -NoNewline -ForegroundColor Yellow
-    Write-GitStatusAsync
-    if (Test-Path $gitfile) {
-      $gitstatus = GitStatusConvert (Get-Content $gitfile)
-      if ($gitstatus) {
-        Write-Host " ($gitstatus)" -NoNewline -ForegroundColor Magenta
+    & $WriteGitStatusAsync
+    $gitContent = Get-Content $gitfile -ErrorAction SilentlyContinue
+    if ($gitContent) {
+      $gitBranch = & $ConvertGitBranch $gitContent $gbr
+      if ($gitBranch) {
+        $gitStatus = & $ConvertGitStatus $gitContent
+        Write-Host " $gitBranch" -NoNewline -ForegroundColor DarkYellow
+        Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
       }
+    } else {
+      Write-Host " $gbr" -NoNewline -ForegroundColor DarkYellow
     }
   } else {
     Remove-Item $gitfile
@@ -110,13 +130,13 @@ function prompt {
   Write-Host "@$([System.Net.Dns]::GetHostName())" -NoNewline -ForegroundColor Red
 
   $isAdmin = $false
-  if ($global:winEnv) {
+  if ($env:OSTYPE) {
     $isAdmin = [bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544")
   } else {
     $isAdmin = $env:USER -eq "root"
   }
   if ($isAdmin) {
-    Write-Host "[#]" -NoNewline -ForegroundColor Red
+    Write-Host "#" -NoNewline -ForegroundColor Yellow
   } else {
     Write-Host "$" -NoNewline
   }
