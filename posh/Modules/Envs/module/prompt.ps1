@@ -121,9 +121,11 @@ function prompt {
     if ($gitContent) {
       $gitBranch = & $ConvertGitBranch $gitContent $gbr
       if ($gitBranch) {
-        $gitStatus = & $ConvertGitStatus $gitContent
         Write-Host " $gitBranch" -NoNewline -ForegroundColor DarkYellow
-        Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
+        $gitStatus = & $ConvertGitStatus $gitContent
+        if ($gitStatus) {
+          Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
+        }
       }
     } else {
       Write-Host " $gbr" -NoNewline -ForegroundColor DarkYellow
