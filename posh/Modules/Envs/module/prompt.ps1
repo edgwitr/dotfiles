@@ -58,7 +58,13 @@ $ConvertGitBranch = {
     if ($status.status[0] -eq "## HEAD (no branch)") {
       return $status.hash
     } else {
-      return $status.status[0]
+      if ($status.status[0] -match "^##\s+([^\.\s]+)(?:\.\.\.([^\s\[]+))?") {
+        $branch = $matches[1]
+        if ($matches[2]) {
+          $branch += " -> $($matches[2])"
+        }
+        return $branch
+      }
     }
   }
 }
