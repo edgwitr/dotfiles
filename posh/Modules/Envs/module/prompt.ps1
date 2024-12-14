@@ -37,7 +37,7 @@ $WriteGitStatusAsync = {
       Set-Location $currentLocation
       @{
         "status" = (git status --porcelain --branch 2> $null) -Split "`n"
-        "stash" = (Get-Content "$env:GITROOT/logs/refs/stash" -ErrorAction SilentlyContinue) -Split "`n"
+        "stash" = (Get-Content "$env:GITROOT/.git/logs/refs/stash" -ErrorAction SilentlyContinue) -Split "`n"
       } | ConvertTo-Json > $targetPath
   }
 
@@ -98,7 +98,7 @@ $ConvertGitStatus = {
   $addsign.Invoke($sign, $status.status, "»", "^R[ MTD] ")
 
   if ($status.stash.count -gt 0) {
-    $sign.Add("`${$($status.stash.count)}","0")
+    $sign.Add(" `$$($status.stash.count)","0")
   }
   $result = $sign.Keys -Join ""
   return $result
