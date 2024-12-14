@@ -5,6 +5,7 @@ $GetGitBranch = {
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
     if (Test-Path "$currentPath/.git") {
+      $env:GITROOT = $currentPath
       $gitDir = "$currentPath/.git"
       if (-not (Test-Path -PathType Container $gitDir)) {
         $gitDir = Get-Content $gitDir
@@ -13,9 +14,9 @@ $GetGitBranch = {
       if (Test-Path $headPath) {
         $branchRef = Get-Content $headPath
         if ($branchRef -match "ref: refs/heads/(.+)") {
-          return "$($matches[1])"
+          return $matches[1]
         } else {
-          return "$branchRef"
+          return $branchRef
         }
       } else {
         return "Error: .git/HEAD not found or unreadable"
@@ -36,8 +37,7 @@ $WriteGitStatusAsync = {
       Set-Location $currentLocation
       @{
         "status" = (git status --porcelain --branch 2> $null) -Split "`n"
-        # "stash" = (git stash list 2> $null) -Split "`n"
-        # "hash" = (git rev-parse --short HEAD 2> $null)
+        "stash" = (Get-Content "$env:GITROOT/logs/refs/stash" -ErrorAction SilentlyContinue) -Split "`n"
       } | ConvertTo-Json > $targetPath
   }
 
@@ -52,8 +52,7 @@ $ConvertGitBranch = {
   if ($status) {
     $status = $status | ConvertFrom-Json
     if ($status.status[0] -eq "## HEAD (no branch)") {
-      # return $status.hash
-      return git rev-parse --short HEAD
+      return $gbr
     } else {
       if ($status.status[0] -match "^##\s+([^\.\s]+)(?:\.\.\.([^\s\[]+))?") {
         $branch = $matches[1]
@@ -98,9 +97,9 @@ $ConvertGitStatus = {
   $addsign.Invoke($sign, $status.status, "X", "^D  ")
   $addsign.Invoke($sign, $status.status, "»", "^R[ MTD] ")
 
-  # if ($status.stash.count -gt 0) {
-  #   $sign.Add("`${$($status.stash.count)}","0")
-  # }
+  if ($status.stash.count -gt 0) {
+    $sign.Add("`${$($status.stash.count)}","0")
+  }
   $result = $sign.Keys -Join ""
   return $result
 }
@@ -120,6 +119,9 @@ function prompt {
         $gitStatus = & $ConvertGitStatus $gitContent
       }
     }
+  } else {
+    Remove-Item $gitfile -ErrorAction SilentlyContinue
+    $env:GITROOT = $null
   }
 
   $userName = [System.Environment]::UserName
@@ -140,8 +142,6 @@ function prompt {
     if ($gitStatus) {
       Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
     }
-  } else {
-    Remove-Item $gitfile
   }
   if ($isAdmin) {
     Write-Host "`n$userName@$hostName #" -NoNewline -ForegroundColor Red
