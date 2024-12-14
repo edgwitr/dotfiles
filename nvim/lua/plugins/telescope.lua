@@ -8,8 +8,6 @@ return {
       { "nvim-lua/plenary.nvim" },
       { "nvim-telescope/telescope-file-browser.nvim" },
       { "nvim-telescope/telescope-frecency.nvim" },
-      { "nvim-telescope/telescope-live-grep-args.nvim" },
-      { "debugloop/telescope-undo.nvim" },
     },
     config = function ()
       local tele = require('telescope')
@@ -40,9 +38,8 @@ return {
         },
       }
 
-      tele.load_extension('undo')
       tele.load_extension('file_browser')
-      tele.load_extension('live_grep_args')
+      tele.load_extension('frecency')
     end,
   },
 }
