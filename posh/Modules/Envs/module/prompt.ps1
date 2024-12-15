@@ -1,14 +1,11 @@
 ﻿$gitfile = [System.IO.Path]::Combine($HOME, ".cache", "gitstatus.json")
 $gitLatestUpdate = ""
+$gitContents = $null
 $GetGitBranch = {
-  # $gb = git rev-parse --short HEAD
-  # if ($gb -eq "fatal: not a git repository (or any of the parent directories): .git") {
-  #   $gb = git rev-parse --short HEAD 2> $null
-  # }
-  # return $gb
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
     if (Test-Path "$currentPath/.git") {
+      $env:GITROOT = $currentPath
       $gitDir = "$currentPath/.git"
       if (-not (Test-Path -PathType Container $gitDir)) {
         $gitDir = Get-Content $gitDir
@@ -17,9 +14,9 @@ $GetGitBranch = {
       if (Test-Path $headPath) {
         $branchRef = Get-Content $headPath
         if ($branchRef -match "ref: refs/heads/(.+)") {
-          return "$($matches[1])"
+          return $matches[1]
         } else {
-          return "$branchRef"
+          return $branchRef
         }
       } else {
         return "Error: .git/HEAD not found or unreadable"
@@ -44,8 +41,7 @@ $WriteGitStatusAsync = {
       Set-Location $currentLocation
       @{
         "status" = (git status --porcelain --branch 2> $null) -Split "`n"
-        "stash" = (git stash list 2> $null) -Split "`n"
-        "hash" = (git rev-parse --short HEAD 2> $null)
+        "stash" = (Get-Content "$env:GITROOT/.git/logs/refs/stash" -ErrorAction SilentlyContinue) -Split "`n"
       } | ConvertTo-Json > $targetPath
   }
 
@@ -60,7 +56,7 @@ $ConvertGitBranch = {
   if ($status) {
     $status = $status | ConvertFrom-Json
     if ($status.status[0] -eq "## HEAD (no branch)") {
-      return $status.hash
+      return $gbr
     } else {
       if ($status.status[0] -match "^##\s+([^\.\s]+)(?:\.\.\.([^\s\[]+))?") {
         $branch = $matches[1]
@@ -89,34 +85,32 @@ $ConvertGitStatus = {
 
   $addsign = {
     param($sign, $statusString, $mark, $matchString)
-    if (-not $sign.Contains($mark)) {
-      if ($statusString -match $matchString) {
+    for ($i = 1; $i -lt $statusString.count; $i++) {
+      if ($statusString[$i] -match $matchString) {
         $sign.Add($mark, 0)
+        break
       }
     }
   }
 
-  for ($i = 1; $i -lt $status.status.count; $i++) {
-    $addsign.Invoke($sign, $status.status[$i], "?", "^\?\? ")
-    $addsign.Invoke($sign, $status.status[$i], "+", "^[MA][ MTD] ")
-    $addsign.Invoke($sign, $status.status[$i], "!", "^[ MTARC]M ")
-    $addsign.Invoke($sign, $status.status[$i], "x", "^[ MTARC]D ")
-    $addsign.Invoke($sign, $status.status[$i], "»", "^R[ MTD] ")
-    $addsign.Invoke($sign, $status.status[$i], "X", "^D  ")
-    $addsign.Invoke($sign, $status.status[$i], "=", "^UU ")
-  }
+  $addsign.Invoke($sign, $status.status, "=", "^UU ")
+  $addsign.Invoke($sign, $status.status, "?", "^\?\? ")
+  $addsign.Invoke($sign, $status.status, "!", "^[ MTARC]M ")
+  $addsign.Invoke($sign, $status.status, "+", "^[MA][ MTD] ")
+  $addsign.Invoke($sign, $status.status, "x", "^[ MTARC]D ")
+  $addsign.Invoke($sign, $status.status, "X", "^D  ")
+  $addsign.Invoke($sign, $status.status, "»", "^R[ MTD] ")
+
   if ($status.stash.count -gt 0) {
-    $sign.Add("`${$($status.stash.count)}","0")
+    $sign.Add(" `$$($status.stash.count)","0")
   }
   $result = $sign.Keys -Join ""
   return $result
 }
 
 function prompt {
-  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm")" -NoNewline -ForegroundColor DarkGray
   $currentPath = $executionContext.SessionState.Path.CurrentLocation
   $currentPath = $currentPath -replace [regex]::Escape($HOME), '~'
-  Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
 
   $gbr = & $GetGitBranch
   if ($gbr) {
@@ -125,32 +119,38 @@ function prompt {
     if ($gitContent) {
       $gitBranch = & $ConvertGitBranch $gitContent $gbr
       if ($gitBranch) {
-        Write-Host " $gitBranch" -NoNewline -ForegroundColor DarkYellow
+        $gbr = $gitBranch
         $gitStatus = & $ConvertGitStatus $gitContent
-        if ($gitStatus) {
-          Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
-        }
       }
-    } else {
-      Write-Host " $gbr" -NoNewline -ForegroundColor DarkYellow
     }
   } else {
-    Remove-Item $gitfile
+    Remove-Item $gitfile -ErrorAction SilentlyContinue
+    $env:GITROOT = $null
   }
 
-  Write-Host "`n$([System.Environment]::UserName)" -NoNewline -ForegroundColor Green
-  Write-Host "@$([System.Net.Dns]::GetHostName())" -NoNewline -ForegroundColor Red
+  $userName = [System.Environment]::UserName
+  $hostName = [System.Net.Dns]::GetHostName()
 
   $isAdmin = $false
-  if ($env:OSTYPE) {
+  if ($env:OSTYPE -eq "win") {
     $isAdmin = [bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544")
   } else {
     $isAdmin = $env:USER -eq "root"
   }
+
+  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm")" -NoNewline
+  Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
+
+  if ($gbr) {
+    Write-Host " $gbr" -NoNewline -ForegroundColor Yellow
+    if ($gitStatus) {
+      Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
+    }
+  }
   if ($isAdmin) {
-    Write-Host "#" -NoNewline -ForegroundColor Yellow
+    Write-Host "`n$userName@$hostName #" -NoNewline -ForegroundColor Red
   } else {
-    Write-Host "$" -NoNewline
+    Write-Host "`n$userName@$hostName $" -NoNewline -ForegroundColor Green
   }
   return " "
 }

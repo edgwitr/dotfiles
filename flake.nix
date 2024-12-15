@@ -22,7 +22,7 @@
     };
   };
 
-  outputs = inputs: 
+  outputs = inputs:
   let
     myname = "edgwitr";
     ver = "24.11";
@@ -75,7 +75,7 @@
             noto-fonts-cjk
             noto-fonts-extra
             noto-fonts-emoji
-            nerdfonts
+            nerd-fonts.monaspace
           ];
         };
         # Enable RealTimeKit
@@ -150,9 +150,9 @@
           nixpkgs.config.allowUnfree = true;
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
           time.timeZone = "Asia/Tokyo";
-          networking.hostName = "Nocturlabe";
+          networking.hostName = "Nocturnal";
           fonts.packages = with pkgs; [
-            nerdfonts
+            nerd-fonts.monaspace
           ];
           system = {
             stateVersion = 5;
@@ -200,7 +200,7 @@
     };
 
     # home-manager Configurations
-    homeConfigurations = 
+    homeConfigurations =
     let
       nos = ({
         home = rec {
@@ -218,11 +218,10 @@
       });
       pg = ({ pkgs, ... }: {
         home.packages = with pkgs; [
-	  devbox
-	  gh
-	  powershell
-	  deno
-	];
+          devbox
+          gh
+          powershell
+        ];
         programs = {
           home-manager.enable = true;
           git.enable = true;
@@ -267,7 +266,7 @@
             source = ./alacritty;
             recursive = true;
           };
-          "alacritty/local.toml".text = 
+          "alacritty/local.toml".text =
           let
             tmux = "${pkgs.tmux}/bin/tmux";
           in

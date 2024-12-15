@@ -1,6 +1,7 @@
 [core]
     quotepath = false
     whitespace = trailing-space,space-before-tab
+    autocrlf = false
 
 [user]
 	name  = "Edgar Aether"
@@ -36,9 +37,3 @@
 
 [branch]
     autoSetupMerge = always
-
-[ghq]
-    root = ~/.local/share/ghq
-
-[url "git@github.com:"]
-    insteadOf = https://github.com/

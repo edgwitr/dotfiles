@@ -20,4 +20,5 @@ Import-Module Abbr
 Import-Module Cmds
 Import-Module Cmps
 Import-Module Envs
+Import-Module Unqs
 if ( Test-Path $PSScriptRoot/local.ps1 ) { . $PSScriptRoot/local.ps1 }
