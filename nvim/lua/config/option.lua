@@ -11,6 +11,8 @@ vim.wo.signcolumn = 'yes'
 
 vim.opt.fileformats = { "unix" }
 
+vim.o.mouse = 'a'
+
 -- keep indent when break
 vim.o.breakindent = true
 vim.o.autoindent = true

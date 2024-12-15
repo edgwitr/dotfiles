@@ -152,7 +152,7 @@
           time.timeZone = "Asia/Tokyo";
           networking.hostName = "Nocturnal";
           fonts.packages = with pkgs; [
-	          nerd-fonts.monaspace
+            nerd-fonts.monaspace
           ];
           system = {
             stateVersion = 5;
@@ -218,11 +218,10 @@
       });
       pg = ({ pkgs, ... }: {
         home.packages = with pkgs; [
-	  devbox
-	  gh
-	  powershell
-	  deno
-	];
+          devbox
+          gh
+          powershell
+        ];
         programs = {
           home-manager.enable = true;
           git.enable = true;
