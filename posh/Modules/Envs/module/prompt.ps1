@@ -1,5 +1,5 @@
-﻿$gitfile = Join-Path -Path $HOME -ChildPath ".cache/gitstatus.json"
-$gitLatestUpdate = Get-Date
+﻿$gitfile = [System.IO.Path]::Combine($HOME, ".cache", "gitstatus.json")
+$gitLatestUpdate = ""
 $GetGitBranch = {
   # $gb = git rev-parse --short HEAD
   # if ($gb -eq "fatal: not a git repository (or any of the parent directories): .git") {
@@ -30,10 +30,14 @@ $GetGitBranch = {
 }
 
 $WriteGitStatusAsync = {
-  if ((Get-Date).AddSeconds(-1) -lt $gitLatestUpdate) {
-    return
-  } else {
+  if ($gitLatestUpdate -eq "") {
     $gitLatestUpdate = Get-Date
+  } else {
+    if ((Get-Date).AddSeconds(-1) -lt $gitLatestUpdate) {
+      return
+    } else {
+      $gitLatestUpdate = Get-Date
+    }
   }
   $scriptBlock = {
       param($currentLocation, $targetPath)
