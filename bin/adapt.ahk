@@ -28,6 +28,7 @@ if (WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe
 ; Caps -> F13(^)
 #HotIf (() => isTerminal)
     F13::Ctrl
+#HotIf
 #HotIf (() => !isTerminal)
     F13 & b:: Left
     F13 & f:: Right
@@ -43,6 +44,7 @@ if (WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe
     F13 & SC028:: F10
     F13 & Space:: ^Space
     F13 & m:: Send "`r"
+#HotIf
 #HotIf GetKeyState("F13", "P") and (() => !isTerminal)
     !p:: Send "^{Up}"
     !n:: Send "^{Down}"

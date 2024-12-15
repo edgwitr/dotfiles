@@ -16,7 +16,7 @@ return {
           'lua', 'python', 'ruby', 'java', 'kotlin', 'scala',
           'html', 'css', 'tsx', 'javascript', 'typescript',
           'vimdoc', 'vim', 'bash', 'json', 'yaml', 'toml', 'powershell',
-          'regex','markdown',
+          'regex','markdown', 'nix',
         },
         highlight = { enable = true },
         indent = { enable = true },

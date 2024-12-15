@@ -1,6 +1,7 @@
 [core]
     quotepath = false
     whitespace = trailing-space,space-before-tab
+    autocrlf = false
 
 [user]
 	name  = "Edgar Aether"

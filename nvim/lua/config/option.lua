@@ -9,8 +9,7 @@ vim.wo.relativenumber = true
 -- keep space for signcolumn
 vim.wo.signcolumn = 'yes'
 
-vim.o.fileformat = 'unix'
-vim.o.ambiwidth = "double"
+vim.opt.fileformats = { "unix" }
 
 -- keep indent when break
 vim.o.breakindent = true
