@@ -42,12 +42,12 @@ Enter:: Send "`n"
     F13 & Space:: ^Space
     F13 & m:: Send "`r"
 
-#HotIf GetKeyState("F13", "P") and (WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
-    !p:: Send "^{Up}"
-    !n:: Send "^{Down}"
-    !b:: Send "^{Left}"
-    !f:: Send "^{Right}"
-    ^h:: MsgBox "hoge"
-    ^r:: Reload
-    ^k:: KeyHistory
-    ^w:: MsgBox WinGetClass("A")
+; #HotIf GetKeyState("F13", "P") and (WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
+;     !p:: Send "^{Up}"
+;     !n:: Send "^{Down}"
+;     !b:: Send "^{Left}"
+;     !f:: Send "^{Right}"
+;     ^h:: MsgBox "hoge"
+;     ^r:: Reload
+;     ^k:: KeyHistory
+;     ^w:: MsgBox WinGetClass("A")
