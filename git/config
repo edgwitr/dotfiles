@@ -4,8 +4,8 @@
     autocrlf = false
 
 [user]
-	name  = "Edgar Aether"
-	email = EdgarAether@outlook.jp
+    name  = "EDOGAWA Iteru"
+    email = EdgarAether@outlook.jp
 
 [init]
     defaultBranch = main

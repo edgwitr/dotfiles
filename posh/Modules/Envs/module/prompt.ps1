@@ -1,6 +1,5 @@
 ﻿$gitfile = [System.IO.Path]::Combine($HOME, ".cache", "gitstatus.json")
 $gitLatestUpdate = ""
-$gitContents = $null
 $GetGitBranch = {
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
