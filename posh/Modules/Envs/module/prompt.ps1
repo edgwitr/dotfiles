@@ -1,5 +1,7 @@
 ﻿$gitfile = [System.IO.Path]::Combine($HOME, ".cache", "gitstatus.json")
 $gitLatestUpdate = ""
+$global:lastPromptTime = Get-Date
+
 $GetGitBranch = {
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
@@ -137,15 +139,31 @@ function prompt {
     $isAdmin = $env:USER -eq "root"
   }
 
-  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm")" -NoNewline
-  Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
+  # time info
+  $duration = (Get-Date) - $global:lastPromptTime
+  $execSeconds = [Math]::Round($duration.TotalSeconds, 2)
+  $hours = [Math]::Floor($execSeconds / 3600)
+  $minutes = [Math]::Floor(($execSeconds % 3600) / 60)
+  $seconds = $execSeconds % 60
+  $global:lastPromptTime = Get-Date
 
+  $formattedTime = ""
+  if ($hours -gt 0) { $formattedTime += "{0}h" -f $hours }
+  if ($minutes -gt 0 -or $hours -gt 0) { $formattedTime += "{0}m" -f $minutes }
+  $formattedTime += "{0:00.00}s" -f $seconds
+
+  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm") {$formattedTime}" -NoNewline
+
+  # location info
+  Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
   if ($gbr) {
     Write-Host " $gbr" -NoNewline -ForegroundColor Yellow
     if ($gitStatus) {
       Write-Host " ($gitStatus)" -NoNewline -ForegroundColor Magenta
     }
   }
+
+  # user info
   if ($isAdmin) {
     Write-Host "`n$userName@$hostName #" -NoNewline -ForegroundColor Red
   } else {
