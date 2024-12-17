@@ -10,30 +10,33 @@ BEGIN {
 
 PROCESS {
   if (-not $null -eq $argValue) {
-    $allOptions += $argValue
+    $argValue | ForEach-Object { $allOptions += $_ }
   }
 }
 
 END {
   if ($allOptions.Count -eq 0) {
-    $allOptions = Get-ChildItem -Path . -Name
+    $allOptions = (Get-ChildItem -Path . -Recurse).FullName | ForEach-Object {
+      $_.Replace((Get-Location).Path + [System.IO.Path]::DirectorySeparatorChar, "")
+    }
   }
 
-  # オルタネイトバッファを有効化
+  # enable alternate screen buffer
   Write-Host -NoNewline ([char]0x1b + "[?1049h")
 
-  # 初期選択肢
+  # initialize variables
   $filteredOptions = $allOptions
   $selectedIndex = 0
   $inputStr = ""
 
-  # 画面描画関数
+  # draw function
   $DrawMenu = {
     param ($options, $selectedIndex, $inputStr)
     [Console]::Clear()
     Write-Host "Filter: $inputStr"
     Write-Host "Use Up/Down Arrow keys to navigate, Enter to select."
     Write-Host ""
+
     for ($i = 0; $i -lt $options.Count; $i++) {
       if ($i -eq $selectedIndex) {
         Write-Host -NoNewline ([char]0x1b + "[7m") # Reverse video mode
@@ -48,13 +51,64 @@ END {
     }
   }
 
-  # 初期画面描画
+  # draw initial menu
   $DrawMenu.Invoke($filteredOptions, $selectedIndex, $inputStr)
 
-  # キー入力待機ループ
+  # wait for key input
   while ($true) {
     $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     switch ($key.VirtualKeyCode) {
+      # control
+      224 {
+        switch ($key.VirtualKeyCode) {
+          # Ctrl+C
+          67 {
+            Write-Host -NoNewline ([char]0x1b + "[?1049l")
+            exit
+          }
+          # Ctrl+N
+          78 {
+            if ($filteredOptions.Count -gt 0) {
+              $selectedIndex = ($selectedIndex + 1) % $filteredOptions.Count
+              $DrawMenu.Invoke($filteredOptions, $selectedIndex, $inputStr)
+            }
+          }
+          # Ctrl+P
+          80 {
+            if ($filteredOptions.Count -gt 0) {
+              $selectedIndex = ($selectedIndex - 1) % $filteredOptions.Count
+              if ($selectedIndex -lt 0) { $selectedIndex = $filteredOptions.Count - 1 }
+              $DrawMenu.Invoke($filteredOptions, $selectedIndex, $inputStr)
+            }
+          }
+          # Left Arrow
+          37 {
+            # Do nothing
+          }
+          # Up Arrow
+          38 {
+            if ($filteredOptions.Count -gt 0) {
+              $selectedIndex = ($selectedIndex - 1) % $filteredOptions.Count
+              if ($selectedIndex -lt 0) { $selectedIndex = $filteredOptions.Count - 1 }
+              $DrawMenu.Invoke($filteredOptions, $selectedIndex, $inputStr)
+            }
+          }
+          # Right Arrow
+          39 {
+            # Do nothing
+          }
+          # Down Arrow
+          40 {
+            if ($filteredOptions.Count -gt 0) {
+              $selectedIndex = ($selectedIndex + 1) % $filteredOptions.Count
+              $DrawMenu.Invoke($filteredOptions, $selectedIndex, $inputStr)
+            }
+          }
+          default {
+            # Do nothing
+          }
+        }
+      }
       # Left Arrow
       37 {
         # Do nothing
@@ -100,13 +154,8 @@ END {
         Write-Host -NoNewline ([char]0x1b + "[?1049l")
         exit
       }
-      # ^C
-      3 {
-        Write-Host -NoNewline ([char]0x1b + "[?1049l")
-        exit
-      }
       default {
-        # 入力された文字をフィルタリング文字列に追加
+        # add filter string
         if ($key.Character -match '\S') {
           $inputStr += $key.Character
           $fzInput = $inputStr -replace '(.)', '$1*' -replace '\*$', ''
