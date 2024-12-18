@@ -9,8 +9,8 @@ BEGIN {
 }
 
 PROCESS {
-  if (-not $null -eq $argValue) {
-    $argValue | ForEach-Object { $allOptions += $_ }
+  if ($argValue) {
+    $argValue.foreach({ $allOptions += $_ })
   }
 }
 
