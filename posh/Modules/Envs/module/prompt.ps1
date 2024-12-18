@@ -149,12 +149,13 @@ function prompt {
     $execSeconds = [Math]::Round($duration.TotalSeconds, 2)
     $hours = [Math]::Floor($execSeconds / 3600)
     $minutes = [Math]::Floor(($execSeconds % 3600) / 60)
-    $seconds = $execSeconds % 60
+    $seconds = [Math]::Floor($execSeconds % 60)
+    $comma = ($execSeconds % 1) * 100
 
     $formattedTime = ""
     if ($hours -gt 0) { $formattedTime += "{0}h" -f $hours }
     if ($minutes -gt 0 -or $hours -gt 0) { $formattedTime += "{0}m" -f $minutes }
-    $formattedTime += "{0:00.00}s" -f $seconds
+    $formattedTime += "{0:00}s{1:00}" -f $seconds, $comma
 
     Write-Host " {$formattedTime}" -NoNewline -ForegroundColor Yellow
   }
