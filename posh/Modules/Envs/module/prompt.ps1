@@ -158,7 +158,6 @@ function prompt {
 
     Write-Host " {$formattedTime}" -NoNewline -ForegroundColor Yellow
   }
-  $global:lastPromptTime = Get-Date
 
   # location info
   Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
@@ -176,4 +175,11 @@ function prompt {
     Write-Host "`n$userName@$hostName $" -NoNewline -ForegroundColor Green
   }
   return " "
+}
+
+Set-PSReadLineKeyHandler -Key Enter -ScriptBlock {
+  param($key, $arg)
+
+  $global:lastPromptTime = Get-Date
+  [Microsoft.PowerShell.PSConsoleReadLine]::ValidateAndAcceptLine()
 }
