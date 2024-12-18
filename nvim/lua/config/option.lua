@@ -22,6 +22,7 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 2
 
 vim.o.cursorline = true
+vim.o.clipboard = "unnamedplus"
 
 -- save history
 vim.o.undofile = true

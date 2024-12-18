@@ -1,6 +1,7 @@
 ﻿$gitfile = [System.IO.Path]::Combine($HOME, ".cache", "gitstatus.json")
 $gitLatestUpdate = ""
 $global:lastPromptTime = Get-Date
+$global:lastCommandCount = 0
 
 $GetGitBranch = {
   $currentPath = (Get-Location).Path
@@ -140,19 +141,24 @@ function prompt {
   }
 
   # time info
-  $duration = (Get-Date) - $global:lastPromptTime
-  $execSeconds = [Math]::Round($duration.TotalSeconds, 2)
-  $hours = [Math]::Floor($execSeconds / 3600)
-  $minutes = [Math]::Floor(($execSeconds % 3600) / 60)
-  $seconds = $execSeconds % 60
+  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm")" -NoNewline
+  $currentCommandCount = (Get-History).Count
+  if ($global:lastCommandCount -lt $currentCommandCount) {
+    $global:lastCommandCount = $currentCommandCount
+    $duration = (Get-Date) - $global:lastPromptTime
+    $execSeconds = [Math]::Round($duration.TotalSeconds, 2)
+    $hours = [Math]::Floor($execSeconds / 3600)
+    $minutes = [Math]::Floor(($execSeconds % 3600) / 60)
+    $seconds = $execSeconds % 60
+
+    $formattedTime = ""
+    if ($hours -gt 0) { $formattedTime += "{0}h" -f $hours }
+    if ($minutes -gt 0 -or $hours -gt 0) { $formattedTime += "{0}m" -f $minutes }
+    $formattedTime += "{0:00.00}s" -f $seconds
+
+    Write-Host " {$formattedTime}" -NoNewline -ForegroundColor Yellow
+  }
   $global:lastPromptTime = Get-Date
-
-  $formattedTime = ""
-  if ($hours -gt 0) { $formattedTime += "{0}h" -f $hours }
-  if ($minutes -gt 0 -or $hours -gt 0) { $formattedTime += "{0}m" -f $minutes }
-  $formattedTime += "{0:00.00}s" -f $seconds
-
-  Write-Host "`n$(Get-Date -Format "yyyy-MM-dd HH:mm") {$formattedTime}" -NoNewline
 
   # location info
   Write-Host "`n[$currentPath]" -NoNewline -ForegroundColor Cyan
