@@ -23,6 +23,7 @@
   };
 
   outputs = inputs:
+
   let
     myname = "edgwitr";
     ver = "24.11";
@@ -126,6 +127,10 @@
       });
     in
     {
+      pc = inputs.nixos.lib.nixosSystem {
+        system = x86linux;
+        modules = [ conf lnxc lenovo ];
+      };
       wsl = inputs.nixos.lib.nixosSystem {
         system = x86linux;
         specialArgs = { nixos-wsl = inputs.nixos-wsl; };
@@ -139,8 +144,6 @@
     };
 
     darwinConfigurations =
-    let
-    in
     {
       mini = inputs.nix-darwin.lib.darwinSystem {
         system = armmac;
@@ -202,14 +205,14 @@
     homeConfigurations =
     let
       nos = ({
-        home = rec {
+        home = {
           stateVersion = ver;
           username = "${myname}";
           homeDirectory = "/home/${myname}";
         };
       });
       mac = ({
-        home = rec {
+        home = {
           stateVersion = ver;
           username = "${myname}";
           homeDirectory = "/Users/${myname}";
@@ -229,6 +232,7 @@
             extraPackages = with pkgs; [
               gcc
               unzip
+              cargo
             ];
           };
           tmux = {
@@ -312,6 +316,14 @@
       });
     in
     {
+      pc = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs {
+          system = x86linux;
+          config.allowUnfree = true;
+        };
+        extraSpecialArgs = { inherit inputs; baseshell = "bash"; };
+        modules = [ nos pg env linux ];
+      };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = x86linux;
