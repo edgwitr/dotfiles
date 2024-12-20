@@ -61,6 +61,7 @@
           isNormalUser = true;
           extraGroups = [ "networkmanager" "wheel" ];
         };
+        programs.nix-ld.enable = true;
         virtualisation.docker.enable = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
