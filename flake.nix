@@ -122,8 +122,6 @@
             boot.systemd = true;
           };
         };
-        programs.nix-ld.enable = true;
-        programs.nix-ld.package = pkgs.nix-ld-rs;
       });
     in
     {
@@ -225,7 +223,13 @@
         programs = {
           home-manager.enable = true;
           git.enable = true;
-          neovim.enable = true;
+          neovim = {
+            enable = true;
+            extraPackages = with pkgs; [
+              gcc
+              unzip
+            ];
+          };
           tmux = {
             enable = true;
             sensibleOnTop = false;
