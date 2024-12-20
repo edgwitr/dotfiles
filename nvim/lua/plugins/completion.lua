@@ -24,9 +24,11 @@ return {
       local mason = require('mason')
       mason.setup({
         ui = {
-          package_installed = "v",
-          package_pending = ">",
-          package_uninstalled = "x"
+          icons = {
+            package_installed = "v",
+            package_pending = ">",
+            package_uninstalled = "x"
+          }
         }
       })
 
@@ -98,6 +100,22 @@ return {
           },
         },
       }
+      local function is_cargo()
+        local os_name = os.getenv("OS") or ""
+        if os_name:match("Windows_NT") then
+          local result = os.execute("where.exe cargo.exe > nul 2>&1")
+          return result == 0
+        else
+          local result = os.execute("command -v cargo > /dev/null 2>&1")
+          return result == 0
+        end
+      end
+
+      if is_cargo() then
+        servers.nil_ls = {}
+      end
+
+
       mason_lspconfig.setup {
         ensure_installed = vim.tbl_keys(servers),
       }
@@ -190,13 +208,6 @@ return {
         }),
         matching = { disallow_symbol_nonprefix_matching = false }
       })
-
-      -- Set up lspconfig.
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-      -- require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
-      --   capabilities = capabilities
-      -- }     -- ...
 
     end,
   },
