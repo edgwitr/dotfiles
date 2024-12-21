@@ -11,19 +11,21 @@ return {
     },
     config = function ()
       local tele = require('telescope')
+      tele.load_extension('file_browser')
+      tele.load_extension('frecency')
       tele.setup {
-
         defaults = {
           mappings = {
             i = {
-              ['<C-d>'] = false,
-              ['<C-u>'] = false,
+              ["<C-h>"] = "which_key"
+              -- ['<C-d>'] = false,
+              -- ['<C-u>'] = false,
             },
           },
         },
         extensions = {
           file_browser = {
-            theme = "ivy",
+            -- theme = "ivy",
             -- disables netrw and use telescope-file-browser in its place
             hijack_netrw = true,
             mappings = {
@@ -37,9 +39,6 @@ return {
           },
         },
       }
-
-      tele.load_extension('file_browser')
-      tele.load_extension('frecency')
     end,
   },
 }

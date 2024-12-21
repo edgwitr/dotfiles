@@ -37,11 +37,11 @@ vim.o.pumheight = 10
 
 vim.opt.list = true
 vim.opt.listchars = {
-  space = '⋅',
+  space = '.',
   tab = '>>',
   trail = '-',
   nbsp = '+',
-  eol = '↵',
+  eol = '$',
 }
 
 vim.api.nvim_create_augroup('extra-whitespace', {})
