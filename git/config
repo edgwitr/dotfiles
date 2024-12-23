@@ -1,7 +1,7 @@
 [core]
     quotepath = false
     whitespace = trailing-space,space-before-tab
-    autocrlf = true
+    autocrlf = input
 
 [user]
     name  = "EDOGAWA Iteru"
