@@ -9,9 +9,7 @@ vim.wo.relativenumber = true
 -- keep space for signcolumn
 vim.wo.signcolumn = 'yes'
 
-vim.opt.fileformats = { "unix" }
-
-vim.o.mouse = 'a'
+vim.o.mouse = ''
 
 -- keep indent when break
 vim.o.breakindent = true
