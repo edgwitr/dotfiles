@@ -22,7 +22,8 @@
     };
   };
 
-  outputs = inputs: 
+  outputs = inputs:
+
   let
     myname = "edgwitr";
     ver = "24.11";
@@ -61,6 +62,7 @@
           isNormalUser = true;
           extraGroups = [ "networkmanager" "wheel" ];
         };
+        programs.nix-ld.enable = true;
         virtualisation.docker.enable = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
@@ -75,7 +77,7 @@
             noto-fonts-cjk
             noto-fonts-extra
             noto-fonts-emoji
-            nerdfonts
+            nerd-fonts.monaspace
           ];
         };
         # Enable RealTimeKit
@@ -122,11 +124,13 @@
             boot.systemd = true;
           };
         };
-        programs.nix-ld.enable = true;
-        programs.nix-ld.package = pkgs.nix-ld-rs;
       });
     in
     {
+      pc = inputs.nixos.lib.nixosSystem {
+        system = x86linux;
+        modules = [ conf lnxc lenovo ];
+      };
       wsl = inputs.nixos.lib.nixosSystem {
         system = x86linux;
         specialArgs = { nixos-wsl = inputs.nixos-wsl; };
@@ -140,8 +144,6 @@
     };
 
     darwinConfigurations =
-    let
-    in
     {
       mini = inputs.nix-darwin.lib.darwinSystem {
         system = armmac;
@@ -150,9 +152,9 @@
           nixpkgs.config.allowUnfree = true;
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
           time.timeZone = "Asia/Tokyo";
-          networking.hostName = "Nocturlabe";
+          networking.hostName = "Nocturnal";
           fonts.packages = with pkgs; [
-            nerdfonts
+            nerd-fonts.monaspace
           ];
           system = {
             stateVersion = 5;
@@ -200,17 +202,17 @@
     };
 
     # home-manager Configurations
-    homeConfigurations = 
+    homeConfigurations =
     let
       nos = ({
-        home = rec {
+        home = {
           stateVersion = ver;
           username = "${myname}";
           homeDirectory = "/home/${myname}";
         };
       });
       mac = ({
-        home = rec {
+        home = {
           stateVersion = ver;
           username = "${myname}";
           homeDirectory = "/Users/${myname}";
@@ -218,15 +220,21 @@
       });
       pg = ({ pkgs, ... }: {
         home.packages = with pkgs; [
-	  devbox
-	  gh
-	  powershell
-	  deno
-	];
+          devbox
+          gh
+          powershell
+        ];
         programs = {
           home-manager.enable = true;
           git.enable = true;
-          neovim.enable = true;
+          neovim = {
+            enable = true;
+            extraPackages = with pkgs; [
+              gcc
+              unzip
+              cargo
+            ];
+          };
           tmux = {
             enable = true;
             sensibleOnTop = false;
@@ -267,7 +275,7 @@
             source = ./alacritty;
             recursive = true;
           };
-          "alacritty/local.toml".text = 
+          "alacritty/local.toml".text =
           let
             tmux = "${pkgs.tmux}/bin/tmux";
           in
@@ -308,6 +316,14 @@
       });
     in
     {
+      pc = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs {
+          system = x86linux;
+          config.allowUnfree = true;
+        };
+        extraSpecialArgs = { inherit inputs; baseshell = "bash"; };
+        modules = [ nos pg env linux ];
+      };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = x86linux;

@@ -65,7 +65,7 @@ function ExpandAliasBeforeCursor ($key, $arg) {
       $original_length,
       $expands_to
     )
-    if ($placeholders -eq 0) { 
+    if ($placeholders -eq 0) {
       continue
     }
 

@@ -1,6 +1,6 @@
 ﻿$env:GITREPOROOT = [System.IO.Path]::Combine($HOME, ".local","git-repositories")
 $env:GITREPOROOT = $env:GITREPOROOT + [System.IO.Path]::DirectorySeparatorChar
-mkdir -Force $env:GITREPOROOT
+New-Item -ItemType Directory -Force $env:GITREPOROOT
 class GitrootPath {
   [string]$Name
   [string]$Path

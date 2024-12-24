@@ -1,10 +1,11 @@
 [core]
     quotepath = false
     whitespace = trailing-space,space-before-tab
+    autocrlf = input
 
 [user]
-	name  = "Edgar Aether"
-	email = EdgarAether@outlook.jp
+    name  = "EDOGAWA Iteru"
+    email = EdgarAether@outlook.jp
 
 [init]
     defaultBranch = main
@@ -36,9 +37,3 @@
 
 [branch]
     autoSetupMerge = always
-
-[ghq]
-    root = ~/.local/share/ghq
-
-[url "git@github.com:"]
-    insteadOf = https://github.com/
