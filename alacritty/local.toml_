@@ -1,0 +1,2 @@
+[terminal]
+shell = { program = "wsl", args = [ "~", "--", "bash", "-c", "\"tmux attach || tmux\"" ] }
