@@ -12,10 +12,11 @@ return {
     config = function()
       require('nvim-treesitter.configs').setup {
         ensure_installed = {
-          'c', 'cpp', 'rust', 'c_sharp', 'fsharp', 'haskell', 'go',
-          'python', 'ruby', 'bash', 'powershell','java', 'kotlin', 'scala',
-          'regex','markdown','nix','lua', 'json', 'yaml', 'toml','vimdoc', 'vim',
-          'html', 'css', 'tsx', 'javascript', 'typescript', 'svelte', 'vue', 'angular',
+          'lua', 'powershell', 'nix',
+          -- 'c', 'cpp', 'rust', 'c_sharp', 'fsharp', 'haskell', 'go',
+          -- 'python', 'ruby', 'bash', 'powershell','java', 'kotlin', 'scala',
+          -- 'regex','markdown','nix','lua', 'json', 'yaml', 'toml','vimdoc', 'vim',
+          -- 'html', 'css', 'tsx', 'javascript', 'typescript', 'svelte', 'vue', 'angular',
         },
         highlight = { enable = true },
         indent = { enable = true },

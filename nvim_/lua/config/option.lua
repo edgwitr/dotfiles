@@ -2,36 +2,36 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- row number
-vim.wo.number = true
+-- -- row number
+-- vim.wo.number = true
 vim.wo.relativenumber = true
 
--- keep space for signcolumn
-vim.wo.signcolumn = 'yes'
+-- -- keep space for signcolumn
+-- vim.wo.signcolumn = 'yes'
 
-vim.o.mouse = ''
+-- vim.o.mouse = ''
 
--- keep indent when break
-vim.o.breakindent = true
-vim.o.autoindent = true
-vim.o.smartindent = true
+-- -- keep indent when break
+-- vim.o.breakindent = true
+-- vim.o.autoindent = true
+-- vim.o.smartindent = true
 vim.o.smarttab = true
 vim.o.expandtab = true
 vim.o.shiftwidth = 2
 
-vim.o.cursorline = true
+-- vim.o.cursorline = true
 vim.o.clipboard = "unnamedplus"
 
 -- save history
 vim.o.undofile = true
--- Case-insensitive searching UNLESS \C or capital in search
-vim.o.smartcase = true
-vim.o.incsearch = true
+-- -- Case-insensitive searching UNLESS \C or capital in search
+-- vim.o.smartcase = true
+-- vim.o.incsearch = true
 
--- completion settings
-vim.o.completeopt = 'menuone,noselect'
--- completion count
-vim.o.pumheight = 10
+-- -- completion settings
+-- vim.o.completeopt = 'menuone,noselect'
+-- -- completion count
+-- vim.o.pumheight = 10
 
 vim.opt.list = true
 vim.opt.listchars = {
