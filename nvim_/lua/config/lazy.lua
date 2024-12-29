@@ -21,9 +21,15 @@ require("lazy").setup({
     -- import your plugins
     { import = "plugins" },
   },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
+
+-- lazy
+vim.keymap.set('n', '<Leader>pl', ":Lazy<CR>", { desc = '[P]lugin [L]azy' })
+-- lazy update
+vim.keymap.set('n', '<Leader>pu', ":Lazy update<CR>", { desc = '[P]lugin [U]pdate' })
+-- lazy profile
+vim.keymap.set('n', '<Leader>pp', ":Lazy profile<CR>", { desc = '[P]lugin [P]rofile' })
+-- lazy clean
+vim.keymap.set('n', '<Leader>pc', ":Lazy clean<CR>", { desc = '[P]lugin [C]lean' })

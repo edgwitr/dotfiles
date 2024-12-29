@@ -14,6 +14,10 @@ end
 
 local MiniDeps = require('mini.deps')
 MiniDeps.setup({ path = { package = path_package } })
+vim.keymap.set('n', '<Leader>pu', ":DepsUpdate<CR>", { desc = '[P]lugin [U]pdate' })
+vim.keymap.set('n', '<Leader>pc', ":DepsUpdate<CR>", { desc = '[P]lugin [C]lean' })
+
+
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 -- core
@@ -28,16 +32,7 @@ now(function ()
     },
   })
   vim.wo.relativenumber = true
-  vim.o.smarttab = true
-  vim.o.expandtab = true
-  vim.o.shiftwidth = 2
 end)
-
-now(function ()
-  vim.keymap.set('n', '<Leader>pu', ":DepsUpdate<CR>", { desc = '[P]lugin [U]pdate' })
-  vim.keymap.set('n', '<Leader>pc', ":DepsClean<CR>", { desc = '[P]lugin [C]lean' })
-end)
-
 now(function ()
   require('mini.sessions').setup()
   vim.keymap.set('n', '<Leader>sw', function ()
@@ -62,8 +57,7 @@ later(function()
 
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
-      'lua',
-      'nix',
+      'lua'
     },
     highlight = { enable = true },
     indent = { enable = true },
@@ -109,12 +103,12 @@ later(function()
     },
   })
 
-  -- -- Disable injections in 'lua' language. In Neovim<0.9 it is
-  -- -- `vim.treesitter.query.set_query()`; in Neovim>=0.9 it is
-  -- -- `vim.treesitter.query.set()`.
-  -- local ts_query = require('vim.treesitter.query')
-  -- local ts_query_set = ts_query.set or ts_query.set_query
-  -- ts_query_set('lua', 'injections', '')
+  -- Disable injections in 'lua' language. In Neovim<0.9 it is
+  -- `vim.treesitter.query.set_query()`; in Neovim>=0.9 it is
+  -- `vim.treesitter.query.set()`.
+  local ts_query = require('vim.treesitter.query')
+  local ts_query_set = ts_query.set or ts_query.set_query
+  ts_query_set('lua', 'injections', '')
 end)
 
 -- appearance
