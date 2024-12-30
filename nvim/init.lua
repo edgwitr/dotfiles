@@ -217,6 +217,7 @@ end)
 later(function ()
   local MiniIndentscope = require('mini.indentscope')
   MiniIndentscope.setup({
+    symbol = ':';
     draw = {
       animation = MiniIndentscope.gen_animation.none()
     },

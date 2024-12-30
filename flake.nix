@@ -16,6 +16,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin = {
+      url = "github:catppuccin/nix";
+    };
     certs = {
       url = "git+ssh://git@github.com/edgwitr/certs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,7 +26,6 @@
   };
 
   outputs = inputs:
-
   let
     myname = "edgwitr";
     ver = "24.11";
@@ -41,14 +43,30 @@
         boot.kernelModules = [ "kvm-amd" ];
         boot.extraModulePackages = [ ];
         # pertision
-        fileSystems."/" = { device = "/dev/disk/by-uuid/3f968628-81c7-426f-85b4-8519905999b9"; fsType = "ext4"; };
-        fileSystems."/boot" = { device = "/dev/disk/by-uuid/A80E-82B4"; fsType = "vfat"; options = [ "fmask=0022" "dmask=0022" ]; };
+
+        fileSystems."/" = {
+          device = "/dev/disk/by-uuid/02e229f9-365c-4dac-b364-9492b5e5366e";
+          fsType = "ext4";
+        };
+
+        fileSystems."/boot" = {
+          device = "/dev/disk/by-uuid/7E4F-7697";
+          fsType = "vfat";
+          options = [ "fmask=0022" "dmask=0022" ];
+        };
         swapDevices = [ { device = "/swapfile"; size = 2*1024; } ];
         networking.useDHCP = lib.mkDefault true;
         nixpkgs.hostPlatform = lib.mkDefault x86linux;
         hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
       });
-      conf = ({ config, pkgs, lib, ... }: {
+      conf = ({ inputs, config, pkgs, lib, ... }: {
+        catppuccin = {
+          enable = true;
+          grub = {
+            enable = true;
+            flavor = "mocha";
+          };
+        };
         time.timeZone = "Asia/Tokyo";
         networking.hostName = "Astrolabe";
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -66,15 +84,32 @@
         virtualisation.docker.enable = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
-        boot.loader.systemd-boot.enable = true;
-        boot.loader.efi.canTouchEfiVariables = true;
+        boot = {
+          loader = {
+            systemd-boot = {
+              enable = true;
+            };
+            efi = {
+              canTouchEfiVariables = true;
+            };
+          };
+        };
         console.useXkbConfig = true;
         networking.networkmanager.enable = true;
-        i18n.defaultLocale = "en_US.UTF-8";
+        i18n = {
+          defaultLocale = "en_US.UTF-8";
+          inputMethod = {
+            type = "fcitx5";
+            fcitx5 = {
+              waylandFrontend = true;
+              addons = with pkgs; [ fcitx5-mozc ];
+            };
+          };
+        };
         fonts = {
           packages = with pkgs; [
             noto-fonts
-            noto-fonts-cjk
+            noto-fonts-cjk-sans
             noto-fonts-extra
             noto-fonts-emoji
             nerd-fonts.monaspace
@@ -83,23 +118,27 @@
         # Enable RealTimeKit
         security.rtkit.enable = true;
         # Enable sound with pipewire.
-        sound.enable = true;
         hardware.pulseaudio.enable = false;
         hardware.bluetooth.enable = true;
         services = {
           # Enable the OpenSSH daemon.
           openssh.enable = true;
+          # Configure desktop environment
+          displayManager.ly.enable = true;
+          # getty.autologinUser = myname;
 
           xserver = {
-            enable = true;
-            # Configure desktop environment
-            displayManager.gdm.enable = true;
-            desktopManager.gnome.enable = true;
+            windowManager = {
+              xmonad = {
+                enable = true;
+                enableContribAndExtras = true;
+              };
+            };
             # Configure keymap in X11
             xkb = {
               layout = "jp";
               variant = "";
-              options = "ctrl:nocaps";
+              options = "ctrl:swapcaps";
             };
           };
           libinput.enable = true;
@@ -113,6 +152,9 @@
           };
         };
         nixpkgs.config.allowUnfree = true;
+        programs = {
+          hyprland.enable = true;
+        };
       });
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
         imports = [ nixos-wsl.nixosModules.wsl ];
@@ -127,9 +169,9 @@
       });
     in
     {
-      pc = inputs.nixos.lib.nixosSystem {
+      lenovo = inputs.nixos.lib.nixosSystem {
         system = x86linux;
-        modules = [ conf lnxc lenovo ];
+        modules = [ conf lnxc lenovo inputs.catppuccin.nixosModules.catppuccin ];
       };
       wsl = inputs.nixos.lib.nixosSystem {
         system = x86linux;
@@ -275,6 +317,10 @@
             source = ./alacritty;
             recursive = true;
           };
+          "hypr" = {
+            source = ./hypr;
+            recursive = true;
+          };
           "alacritty/local.toml".text =
           let
             tmux = "${pkgs.tmux}/bin/tmux";
@@ -286,43 +332,26 @@
         };
       });
       linux = ({ pkgs, ...}: {
-        home.packages = [ pkgs.xclip ];
-        dconf.settings = {
-          "org/gnome/shell" = {
-            favorite-apps = [
-              "firefox.desktop"
-              "org.gnome.Epiphany.desktop"
-              "org.gnome.Console.desktop"
-              "org.gnome.Nautilus.desktop"
-              "org.gnome.TextEditor.desktop"
-              "org.gnome.Geary.desktop"
-              "org.gnome.Calendar.desktop"
-            ];
-          };
-          "org/gnome/desktop/input-sources" = {
-            xkb-options = "['ctrl:nocaps']";
-          };
-          "org/gnome/desktop/wm/preferences" = {
-            button-layout = ":minimize,maximize,close";
-          };
-          "org/gnome/desktop/interface" = {
-            clock-show-weekday = true;
-          };
-        };
+        home.packages = [
+          pkgs.xclip
+          pkgs.xfce.thunar
+        ];
         programs = {
+          wofi.enable = true;
+          alacritty.enable = true;
           firefox.enable = true;
           vscode.enable = true;
         };
       });
     in
     {
-      pc = inputs.home-manager.lib.homeManagerConfiguration {
+      lnx = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = x86linux;
           config.allowUnfree = true;
         };
         extraSpecialArgs = { inherit inputs; baseshell = "bash"; };
-        modules = [ nos pg env linux ];
+        modules = [ nos pg env linux inputs.catppuccin.homeManagerModules.catppuccin ];
       };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
