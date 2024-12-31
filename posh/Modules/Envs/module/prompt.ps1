@@ -99,7 +99,7 @@ $ConvertGitStatus = {
   $addsign.Invoke($sign, $status.status, "?", "^\?\? ")
   $addsign.Invoke($sign, $status.status, "!", "^[ MTARC]M ")
   $addsign.Invoke($sign, $status.status, "+", "^[MA][ MTD] ")
-  $addsign.Invoke($sign, $status.status, "x", "^[ MTARC]D ")
+  $addsign.Invoke($sign, $status.status, "d", "^[ MTARC]D ")
   $addsign.Invoke($sign, $status.status, "X", "^D  ")
   $addsign.Invoke($sign, $status.status, "»", "^R[ MTD] ")
 
