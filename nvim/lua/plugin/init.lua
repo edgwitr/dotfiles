@@ -1,0 +1,7 @@
+require("plugin.main")
+require("plugin.treesitter")
+require("plugin.colorscheme")
+require("plugin.lsp")
+require("plugin.completion")
+require("plugin.git")
+require("plugin.fuzzy")

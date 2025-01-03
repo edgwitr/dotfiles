@@ -246,21 +246,7 @@
     # home-manager Configurations
     homeConfigurations =
     let
-      nos = ({
-        home = {
-          stateVersion = ver;
-          username = "${myname}";
-          homeDirectory = "/home/${myname}";
-        };
-      });
-      mac = ({
-        home = {
-          stateVersion = ver;
-          username = "${myname}";
-          homeDirectory = "/Users/${myname}";
-        };
-      });
-      pg = ({ pkgs, ... }: {
+      pkg = ({ pkgs, ... }: {
         home.packages = with pkgs; [
           devbox
           gh
@@ -287,48 +273,50 @@
           };
         };
       });
-      env = ({ pkgs, baseshell, ... }: {
+      env = ({ config, pkgs, baseshell, homedir, ... }:
+      let
+        symlink = config.lib.file.mkOutOfStoreSymlink;
+        home = "/${homedir}/${myname}";
+      in
+      {
         home = {
+          stateVersion = ver;
+          username = "${myname}";
+          homeDirectory = home;
           sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
           };
           file = {
           };
         };
-        xdg.dataFile = {
-          "powershell/Modules" = {
-            source = ./posh/Modules;
-            recursive = true;
+        xdg = {
+          dataFile = {
+            "powershell/Modules".source = symlink /${homedir}/${myname}/.local/dotfiles/posh/Modules;
           };
-        };
-        xdg.configFile = {
-          "powershell/Microsoft.PowerShell_profile.ps1" = {
-            source = ./posh/Microsoft.PowerShell_profile.ps1;
+          configFile = {
+            "powershell/Microsoft.PowerShell_profile.ps1".source = ./posh/Microsoft.PowerShell_profile.ps1;
+            "nvim".source = symlink /${homedir}/${myname}/.local/dotfiles/nvim;
+            "git" = {
+              source = ./git;
+              recursive = true;
+            };
+            "alacritty" = {
+              source = ./alacritty;
+              recursive = true;
+            };
+            "hypr" = {
+              source = ./hypr;
+              recursive = true;
+            };
+            "alacritty/local.toml".text =
+            let
+              tmux = "${pkgs.tmux}/bin/tmux";
+            in
+            ''
+              [terminal]
+              shell = { program = "${baseshell}", args = [ "-c", "${tmux} attach || ${tmux}" ] }
+            '';
           };
-          "nvim" = {
-            source = ./nvim;
-            recursive = true;
-          };
-          "git" = {
-            source = ./git;
-            recursive = true;
-          };
-          "alacritty" = {
-            source = ./alacritty;
-            recursive = true;
-          };
-          "hypr" = {
-            source = ./hypr;
-            recursive = true;
-          };
-          "alacritty/local.toml".text =
-          let
-            tmux = "${pkgs.tmux}/bin/tmux";
-          in
-          ''
-            [terminal]
-            shell = { program = "${baseshell}", args = [ "-c", "${tmux} attach || ${tmux}" ] }
-          '';
         };
       });
       linux = ({ pkgs, ...}: {
@@ -350,28 +338,37 @@
           system = x86linux;
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs; baseshell = "bash"; };
-        modules = [ nos pg env linux inputs.catppuccin.homeManagerModules.catppuccin ];
+        extraSpecialArgs = {
+          inherit inputs;
+          baseshell = "bash";
+          homedir = "home";
+        };
+        modules = [ pkg env linux ];
       };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = x86linux;
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs; baseshell = "bash"; };
-        modules = [ nos pg env ];
+        extraSpecialArgs = {
+          inherit inputs;
+          baseshell = "bash";
+          homedir = "home";
+        };
+        modules = [ pkg env ];
       };
       mac = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = armmac;
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs; baseshell = "zsh"; };
-        modules = [ mac pg env ];
+        extraSpecialArgs = {
+          inherit inputs;
+          baseshell = "zsh";
+          homedir = "Users";
+        };
+        modules = [ pkg env ];
       };
     };
-
   };
 }
-
-
