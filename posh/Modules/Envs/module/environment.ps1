@@ -2,15 +2,21 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 if($null -eq $env:HOME) {
   $env:HOME = $env:USERPROFILE
+  $sep = ";"
+} else {
+  $sep = ":"
 }
-$env:XDG_CACHE_HOME = "$env:HOME/.cache"
-$env:XDG_STATE_HOME = "$env:HOME/.local/state"
-$env:XDG_DATA_HOME = "$env:HOME/.local/share"
-$env:XDG_CONFIG_HOME = "$env:HOME/.config"
-$env:SANDBOX = "$env:HOME/.local/dotfiles/sandbox"
 
-$env:RUSTUP_HOME = "$env:HOME/.local/rustup"
-$env:CARGO_HOME = "$env:HOME/.local/cargo"
-$env:GOPATH = "$env:HOME/.local/go"
+$env:GITREPOROOT = [System.IO.Path]::Combine($HOME, ".local","git-repositories")
+$env:XDG_CACHE_HOME = [System.IO.Path]::Combine($env:HOME, ".cache")
+$env:XDG_CONFIG_HOME = [System.IO.Path]::Combine($env:HOME, ".config")
+$env:XDG_STATE_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "state")
+$env:XDG_DATA_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "share")
+
+$env:RUSTUP_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "rustup")
+$env:CARGO_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "cargo")
+$env:GOPATH = [System.IO.Path]::Combine($env:HOME, ".local", "go")
+
+$env:VIMINIT = 'source $XDG_CONFIG_HOME/nvim/init.vim'
 
 $env:EDITOR = "nvim"
