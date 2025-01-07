@@ -60,13 +60,6 @@
         hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
       });
       conf = ({ inputs, config, pkgs, lib, ... }: {
-        catppuccin = {
-          enable = true;
-          grub = {
-            enable = true;
-            flavor = "mocha";
-          };
-        };
         time.timeZone = "Asia/Tokyo";
         networking.hostName = "Astrolabe";
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
