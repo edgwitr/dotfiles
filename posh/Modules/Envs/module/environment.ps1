@@ -2,9 +2,6 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 if($null -eq $env:HOME) {
   $env:HOME = $env:USERPROFILE
-  $sep = ";"
-} else {
-  $sep = ":"
 }
 
 $env:GITREPOROOT = [System.IO.Path]::Combine($HOME, ".local","git-repositories")
@@ -16,7 +13,5 @@ $env:XDG_DATA_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "share")
 $env:RUSTUP_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "rustup")
 $env:CARGO_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "cargo")
 $env:GOPATH = [System.IO.Path]::Combine($env:HOME, ".local", "go")
-
-$env:VIMINIT = 'source $XDG_CONFIG_HOME/nvim/init.vim'
 
 $env:EDITOR = "nvim"
