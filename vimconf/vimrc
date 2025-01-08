@@ -9,5 +9,7 @@ augroup MyDenopsConfig
   " denopsがロードされた直後のコール
   autocmd User DenopsReady echomsg "Denops is ready!"
   " プラグインがロードされた直後のコール
-  autocmd User DenopsPluginPost:config call denops#request('config', 'sss', [])
+  autocmd User DenopsPluginPost:test call denops#request('test', 'stst', [])
 augroup END
+
+let g:denops#debug = 1
