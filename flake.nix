@@ -248,12 +248,19 @@
         programs = {
           home-manager.enable = true;
           git.enable = true;
+          vim = {
+            enable = true;
+            extraConfig = ''
+              let $PATH = "${pkgs.deno}/bin:$PATH"
+            '';
+          };
           neovim = {
             enable = true;
             extraPackages = with pkgs; [
               gcc
               unzip
               cargo
+              deno
             ];
           };
           tmux = {
@@ -278,6 +285,7 @@
           homeDirectory = home;
           sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
+            ZZORR = "tester";
           };
           file = {
           };
@@ -288,7 +296,8 @@
           };
           configFile = {
             "powershell/Microsoft.PowerShell_profile.ps1".source = ./posh/Microsoft.PowerShell_profile.ps1;
-            "nvim".source = symlink /${homedir}/${myname}/.local/dotfiles/nvim;
+            "vim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
+            "nvim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
             "git" = {
               source = ./git;
               recursive = true;
