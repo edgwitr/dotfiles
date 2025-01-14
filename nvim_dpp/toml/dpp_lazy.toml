@@ -1,0 +1,10 @@
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+
+[[plugins]]
+repo = 'echasnovski/mini.pairs'
+on_map = ['y']
+lua_source = '''
+require("mini.pairs").setup()
+'''

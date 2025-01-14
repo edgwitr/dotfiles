@@ -10,6 +10,17 @@ augroup MyDenopsConfig
   autocmd User DenopsReady echomsg "Denops is ready!"
   " プラグインがロードされた直後のコール
   autocmd User DenopsPluginPost:test call denops#request('test', 'stst', [])
+  autocmd User DenopsPluginPost:gamen if argc() == 0 | call denops#request("gamen", "gamensetup", []) | endif
 augroup END
 
-let g:denops#debug = 1
+" let g:denops#debug = 1
+" let g:denops_server_addr = "127.0.0.1:34141"
+
+" packloadall
+" call petit#pairs#setup()
+
+" " autocmdグループを作成
+" augroup SimpleStartupScreen
+"   autocmd!
+"   autocmd VimEnter * if argc() == 0 | call hajimari#gamen#setup() | endif
+" augroup END

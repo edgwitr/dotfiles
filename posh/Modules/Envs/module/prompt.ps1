@@ -6,13 +6,19 @@ $global:lastCommandCount = 0
 $GetGitBranch = {
   $currentPath = (Get-Location).Path
   while ($currentPath -ne (Get-Item $currentPath).PSDrive.Root) {
-    if (Test-Path "$currentPath/.git") {
+    $barePath = "$currentPath/.git"
+    if (Test-Path $barePath) {
       $env:GITROOT = $currentPath
-      $gitDir = "$currentPath/.git"
-      if (-not (Test-Path -PathType Container $gitDir)) {
-        $gitDir = Get-Content $gitDir
+      $gitItem = Get-Item $barePath -Force
+      if (-not ($gitItem.Attributes -eq 'Hidden, Directory')) {
+        $gitContent = Get-Content $barePath
+        if ($gitContent -match "gitdir: (.+)") {
+          $barePath = $matches[1]
+        } else {
+          return "Error: .git not a directory"
+        }
       }
-      $headPath = "$gitDir/HEAD"
+      $headPath = "$barePath/HEAD"
       if (Test-Path $headPath) {
         $branchRef = Get-Content $headPath
         if ($branchRef -match "ref: refs/heads/(.+)") {
