@@ -3,7 +3,7 @@ import Parser from "npm:tree-sitter@^0.22.4";
 import C from "npm:tree-sitter-c@^0.23.4";
 
 export const main: Entrypoint = async (denops) => {
-  await denops.call("");
+  await denops.cmd('echo "Hello, World!"');
   denops.dispatcher = {
     async sss(): Promise<void> {
     },
