@@ -1,7 +1,7 @@
-import type { Entrypoint } from "jsr:@denops/std@^7.0.0";
-import * as option from "jsr:@denops/std@^7.0.0/option";
-import * as fn from "jsr:@denops/std@^7.0.0/function";
-import * as buffer from "jsr:@denops/std@^7.0.0/buffer";
+import type { Entrypoint } from "jsr:@denops/std@^7.4.0";
+import * as option from "jsr:@denops/std@^7.4.0/option";
+import * as fn from "jsr:@denops/std@^7.4.0/function";
+import * as buffer from "jsr:@denops/std@^7.4.0/buffer";
 import { assert, is } from "jsr:@core/unknownutil@^4.3.0";
 
 
