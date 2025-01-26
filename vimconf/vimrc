@@ -22,3 +22,4 @@ let g:denops#debug = 1
 " call petit#pairs#setup()
 
 set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
+call petit#treesitter#setup()
