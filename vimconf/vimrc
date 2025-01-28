@@ -22,4 +22,7 @@ let g:denops#debug = 1
 " call petit#pairs#setup()
 
 set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
-call petit#treesitter#setup()
+let s:conf = {}
+let s:conf.highlight = v:true
+let s:conf.ensure_installed = ["typescript", "c"]
+call petit#treesitter#setup(json_encode(s:conf))
