@@ -301,14 +301,6 @@
             "powershell/Microsoft.PowerShell_profile.ps1".source = ./posh/Microsoft.PowerShell_profile.ps1;
             "vim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
             "nvim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
-            "wave/settings.json".text = ''
-              {
-                "autoupdate:channel": "latest",
-                "term:fontfamily": "MonaspiceNe Nerd Font",
-                "term:localshellpath": "${pkgs.powershell}/bin/pwsh".
-                "term:theme": "campbell"
-              }
-            '';
             "git" = {
               source = ./git;
               recursive = true;
@@ -317,20 +309,10 @@
         };
       });
       linux = ({ pkgs, ...}: {
-        home = {
-          packages = [
-            pkgs.xclip
-            pkgs.xfce.thunar
-          ];
-        };
-        xdg = {
-          configFile = {
-            "hypr" = {
-              source = ./hypr;
-              recursive = true;
-            };
-          };
-        };
+        home.packages = [
+          pkgs.xclip
+          pkgs.xfce.thunar
+        ];
         programs = {
           wofi.enable = true;
           alacritty.enable = true;
