@@ -229,6 +229,8 @@
               "discord"
               "karabiner-elements"
               "chatgpt"
+              "warp"
+              "wave"
             ];
           };
         })
@@ -252,6 +254,7 @@
             enable = true;
             extraConfig = ''
               let $PATH = "${pkgs.deno}/bin:$PATH"
+              source ~/.config/vim/vimrc
             '';
           };
           neovim = {
