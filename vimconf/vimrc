@@ -24,5 +24,8 @@ let g:denops#debug = 1
 set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
 let s:conf = {}
 let s:conf.highlight = v:true
-let s:conf.ensure_installed = ["typescript", "c"]
-call petit#treesitter#setup(json_encode(s:conf))
+let s:conf.ensure_installed = ["typescript", "c", "cpp"]
+call petit#treesitter#setup({
+      \ "highlight": v:true,
+      \ "ensure_installed": ["typescript", "c", "cpp"],
+      \ })

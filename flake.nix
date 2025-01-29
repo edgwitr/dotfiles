@@ -246,17 +246,12 @@
           devbox
           gh
           powershell
+          vim
+          deno
         ];
         programs = {
           home-manager.enable = true;
           git.enable = true;
-          vim = {
-            enable = true;
-            extraConfig = ''
-              let $PATH = "${pkgs.deno}/bin:$PATH"
-              source ~/.config/vim/vimrc
-            '';
-          };
           neovim = {
             enable = true;
             extraPackages = with pkgs; [
