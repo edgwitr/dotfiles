@@ -1,0 +1,57 @@
+[colors.primary]
+background = "#1E1E1E"   # VS Code のエディター背景
+foreground = "#D4D4D4"   # メインのテキスト色
+dim_foreground = "#A0A0A0"   # やや薄いテキスト色
+bright_foreground = "#FFFFFF"   # 強調表示などに使用
+
+[colors.cursor]
+text = "#1E1E1E"       # カーソル下の文字（背景と同色）
+cursor = "#AEAFAD"     # VS Code のカーソル色（editorCursor.foreground）
+
+[colors.vi_mode_cursor]
+text = "#1E1E1E"       # 同上
+cursor = "#569CD6"     # VS Code のアクセントブルー（例として）
+
+[colors.search.matches]
+foreground = "#1E1E1E"   # 検索結果内文字色
+background = "#515C6A"   # VS Code の findMatchBackground に近い
+
+[colors.search.focused_match]
+foreground = "#1E1E1E"
+background = "#264F78"   # VS Code の選択範囲・フォーカス時の色
+
+[colors.footer_bar]
+foreground = "#D4D4D4"   # ステータスバー文字色
+background = "#007ACC"   # VS Code のステータスバー（activityBar）に見合うブルー
+
+[colors.hints.start]
+foreground = "#1E1E1E"
+background = "#DCDCAA"   # やや明るい黄色（ヒント用背景例）
+
+[colors.hints.end]
+foreground = "#1E1E1E"
+background = "#3C3C3D"   # ダークグレー（ヒント終了用背景例）
+
+[colors.selection]
+text = "#D4D4D4"
+background = "#264F78"
+
+[colors.normal]
+black   = "#000000"
+red     = "#CD3131"
+green   = "#6A9955"
+yellow  = "#E5E510"
+blue    = "#2472C8"
+magenta = "#BC3FBC"
+cyan    = "#11A8CD"
+white   = "#E5E5E5"
+
+[colors.bright]
+black   = "#666666"   # Bright Black
+red     = "#F44747"   # Bright Red
+green   = "#23D18B"   # Bright Green
+yellow  = "#E5E588"
+blue    = "#3B8EEA"   # Bright Blue
+magenta = "#D670D6"   # Bright Magenta
+cyan    = "#9CDCFE"   # Bright Cyan
+white   = "#FFFFFF"   # Bright White

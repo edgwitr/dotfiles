@@ -14,4 +14,7 @@ $env:RUSTUP_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "rustup")
 $env:CARGO_HOME = [System.IO.Path]::Combine($env:HOME, ".local", "cargo")
 $env:GOPATH = [System.IO.Path]::Combine($env:HOME, ".local", "go")
 
+# pathに~/.local/binを追加
+$env:PATH = $env:PATH + [System.IO.Path]::PathSeparator + [System.IO.Path]::Combine($HOME, ".local","bin")
+
 $env:EDITOR = "nvim"

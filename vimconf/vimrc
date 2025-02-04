@@ -26,7 +26,6 @@ call petit#treesitter#setup({
       \ 'highlight': {
         \ "enable": v:true,
         \ "disable": ["cpp"],
-        \ "additional_vim_regex_highlighting": v:true,
       \ },
-      \ 'ensure_installed': ["typescript", "c", "cpp"]
+      \ 'ensure_installed': ["c"]
       \ })

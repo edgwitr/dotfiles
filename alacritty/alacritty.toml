@@ -1,12 +1,12 @@
 [general]
 import = [
   "local.toml",
-  "alacritty-theme/themes/campbell.toml",
+  "themes/vscode.toml",
 ]
 
 [window]
 dimensions = { columns = 130, lines = 40 }
 
 [font]
-size = 14
+size = 11
 normal = { family = "MonaspiceNe NF", style = "Regular" }
