@@ -29,3 +29,5 @@ call petit#treesitter#setup({
       \ },
       \ 'ensure_installed': ["c"]
       \ })
+
+set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.lsp

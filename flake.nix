@@ -106,6 +106,7 @@
             noto-fonts-extra
             noto-fonts-emoji
             nerd-fonts.monaspace
+            nerd-fonts.caskaydia-cove
           ];
         };
         # Enable RealTimeKit
@@ -190,6 +191,7 @@
           networking.hostName = "Nocturnal";
           fonts.packages = with pkgs; [
             nerd-fonts.monaspace
+            nerd-fonts.caskaydia-cove
           ];
           system = {
             stateVersion = 5;
@@ -224,13 +226,12 @@
             };
             casks = [
               "alacritty"
+              "wezterm"
               "elecom-mouse-util"
               "visual-studio-code"
               "discord"
               "karabiner-elements"
               "chatgpt"
-              "warp"
-              "wave"
             ];
           };
         })
