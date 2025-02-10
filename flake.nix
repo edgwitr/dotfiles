@@ -225,7 +225,7 @@
               cleanup = "uninstall";
             };
             casks = [
-              "kitty"
+              "rio"
               "visual-studio-code"
               "elecom-mouse-util"
               "karabiner-elements"
@@ -296,7 +296,7 @@
             "powershell/Microsoft.PowerShell_profile.ps1".source = ./posh/Microsoft.PowerShell_profile.ps1;
             "vim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
             "nvim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
-            "kitty".source = symlink /${homedir}/${myname}/.local/dotfiles/kitty;
+            "rio".source = symlink /${homedir}/${myname}/.local/dotfiles/rio;
             "karabiner".source = symlink /${homedir}/${myname}/.local/dotfiles/karabiner;
             "git" = {
               source = ./git;

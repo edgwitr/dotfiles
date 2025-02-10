@@ -1,0 +1,80 @@
+[fonts]
+hinting = true
+
+[fonts.regular]
+family = 'CaskaydiaCove Nerd Font'
+style = "Normal"
+weight = 400
+
+[fonts.bold]
+family = 'CaskaydiaCove Nerd Font'
+style = "Normal"
+weight = 800
+
+[fonts.italic]
+family = 'CaskaydiaCove Nerd Font'
+style = "Italic"
+weight = 400
+
+[fonts.bold-italic]
+family = 'CaskaydiaCove Nerd Font'
+style = "Italic"
+weight = 800
+
+[colors]
+# Main colors
+background = "#1E1E1E"
+foreground = "#D4D4D4"
+
+# Normal colors
+black      = "#000000"
+red        = "#cd3131"
+green      = "#0dbc79"
+yellow     = "#e5e510"
+blue       = "#2472c8"
+magenta    = "#bc3fbc"
+cyan       = "#11a8cd"
+white      = "#e5e5e5"
+
+# Dim colors
+dim-black      = "#525252"
+dim-red        = "#C13D3D"
+dim-green      = "#1CA76F"
+dim-yellow     = "#C4C436"
+dim-blue       = "#2F72BB"
+dim-magenta    = "#AB5AAB"
+dim-cyan       = "#2193AF"
+dim-white      = "#B7B7B7"
+dim-foreground = "#626262"
+
+# Light colors
+light-black      = "#666666"
+light-red        = "#f14c4c"
+light-green      = "#23d18b"
+light-yellow     = "#f5f543"
+light-blue       = "#3b8eea"
+light-magenta    = "#d670d6"
+light-cyan       = "#29b8db"
+light-white      = "#ffffff"
+light-foreground = "#D4D4D4"
+
+cursor     = "#AEAFAD"
+vi-cursor = "#AEAFAD"
+
+tabs                    = "#2D2D2D"
+tabs-foreground         = "#858585"
+tabs-active             = "#1E1E1E"
+tabs-active-highlight   = "#007ACC"
+tabs-active-foreground  = "#D4D4D4"
+bar                     = "#333333"
+
+# Search
+search-match-background         = "#264F78"
+search-match-foreground         = "#FFFFFF"
+search-focused-match-background = "#007ACC"
+search-focused-match-foreground = "#FFFFFF"
+
+# Selection
+selection-foreground = "#D4D4D4"
+selection-background = "#264F78"
+
