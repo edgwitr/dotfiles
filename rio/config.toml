@@ -1,25 +1,7 @@
 [fonts]
 hinting = true
-
-[fonts.regular]
 family = 'CaskaydiaCove Nerd Font'
-style = "Normal"
-weight = 400
-
-[fonts.bold]
-family = 'CaskaydiaCove Nerd Font'
-style = "Normal"
-weight = 800
-
-[fonts.italic]
-family = 'CaskaydiaCove Nerd Font'
-style = "Italic"
-weight = 400
-
-[fonts.bold-italic]
-family = 'CaskaydiaCove Nerd Font'
-style = "Italic"
-weight = 800
+italic.weight = 400
 
 [colors]
 # Main colors
@@ -77,4 +59,3 @@ search-focused-match-foreground = "#FFFFFF"
 # Selection
 selection-foreground = "#D4D4D4"
 selection-background = "#264F78"
-
