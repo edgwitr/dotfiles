@@ -21,13 +21,13 @@ let g:denops#debug = 1
 " call petit#setup()
 " call petit#pairs#setup()
 
-set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
-call petit#treesitter#setup({
-      \ 'highlight': {
-        \ "enable": v:true,
-        \ "disable": ["cpp"],
-      \ },
-      \ 'ensure_installed': ["c"]
-      \ })
+" set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
+" call petit#treesitter#setup({
+"       \ 'highlight': {
+"         \ "enable": v:true,
+"         \ "disable": ["cpp"],
+"       \ },
+"       \ 'ensure_installed': ["c"]
+"       \ })
 
-set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.lsp
+" set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.lsp

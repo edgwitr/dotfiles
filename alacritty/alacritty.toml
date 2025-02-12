@@ -9,4 +9,4 @@ dimensions = { columns = 130, lines = 40 }
 
 [font]
 size = 11
-normal = { family = "MonaspiceNe NF", style = "Regular" }
+normal = { family = "Cascadia Code", style = "Regular" }

@@ -17,4 +17,5 @@ New-Item -ItemType Junction -Target "$dotroot\vimconf" -Path "$Env:USERPROFILE\.
 New-Item -ItemType Junction -Target "$dotroot\vimconf" -Path "$Env:USERPROFILE\vimfiles"
 New-Item -ItemType Junction -Target "$dotroot\gh" -Path "$Env:USERPROFILE\.config\gh"
 New-Item -ItemType Junction -Target "$dotroot\alacritty" -Path "$Env:APPDATA\alacritty"
+New-Item -ItemType Junction -Target "$dotroot\rio" -Path "$Env:LOCALAPPDATA\rio"
 New-Item -ItemType Junction -Target "$dotroot\winterm" -Path "$Env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
