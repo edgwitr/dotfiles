@@ -14,20 +14,20 @@ execute 'set runtimepath^=' . substitute(fnamemodify(s:denops, ':p') , '[/\\]$',
 " augroup END
 
 let g:denops#debug = 1
-" set runtimepath+=~/.cache/vim/denotest/github.com/vim-denops/denops-shared-server.vim
-" let g:denops_server_addr = "127.0.0.1:34141"
+set runtimepath+=~/.cache/vim/denotest/github.com/vim-denops/denops-shared-server.vim
+let g:denops_server_addr = "127.0.0.1:34141"
 
 " set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.vim
 " call petit#setup()
 " call petit#pairs#setup()
 
-" set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
-" call petit#treesitter#setup({
-"       \ 'highlight': {
-"         \ "enable": v:true,
-"         \ "disable": ["cpp"],
-"       \ },
-"       \ 'ensure_installed': ["c"]
-"       \ })
+set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
+call petit#treesitter#setup({
+      \ 'highlight': {
+        \ "enable": v:true,
+        \ "disable": ["cpp"],
+      \ },
+      \ 'ensure_installed': ["c"]
+      \ })
 
 " set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.lsp

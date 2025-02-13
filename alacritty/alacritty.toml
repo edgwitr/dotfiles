@@ -8,5 +8,5 @@ import = [
 dimensions = { columns = 130, lines = 40 }
 
 [font]
-size = 11
-normal = { family = "Cascadia Code", style = "Regular" }
+size = 12
+normal = { family = "Monaspace Neon" }

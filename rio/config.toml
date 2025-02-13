@@ -2,17 +2,18 @@
 performance = "high"
 backend = "automatic"
 
+# [fonts]
+# hinting = true
 [fonts]
-hinting = true
-family = "Monaspace Neon Var"
-italic.weight = 400
-features = [
-  'calt', 'clig', 'dlig',
-  'liga',
-  'cv32', 'cv62',
-  'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09', 'ss10',
-  'ss11', 'ss12', 'ss13', 'ss14', 'ss15', 'ss16', 'ss17', 'ss18', 'ss19', 'ss20',
-]
+# size = 15
+# family = "Monaspace Xenon"
+# features = [
+#   'calt', 'clig', 'dlig',
+#   'liga',
+#   'cv32', 'cv62',
+#   'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09', 'ss10',
+#   'ss11', 'ss12', 'ss13', 'ss14', 'ss15', 'ss16', 'ss17', 'ss18', 'ss19', 'ss20',
+# ]
 extras = [
   { family = "Hackgen" },
 ]

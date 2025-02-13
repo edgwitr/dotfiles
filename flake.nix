@@ -225,12 +225,13 @@
               cleanup = "uninstall";
             };
             casks = [
-              "rio"
+              "alacritty"
               "visual-studio-code"
               "elecom-mouse-util"
               "karabiner-elements"
               "discord"
               "chatgpt"
+              "font-monaspace"
             ];
           };
         })

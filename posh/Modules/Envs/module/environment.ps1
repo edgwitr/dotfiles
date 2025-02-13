@@ -18,3 +18,5 @@ $env:GOPATH = [System.IO.Path]::Combine($env:HOME, ".local", "go")
 $env:PATH = $env:PATH + [System.IO.Path]::PathSeparator + [System.IO.Path]::Combine($HOME, ".local","bin")
 
 $env:EDITOR = "nvim"
+
+# Set-PSReadLineOption -Colors @{ "InlinePrediction" = "`e[3;90m" }
