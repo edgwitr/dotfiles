@@ -48,6 +48,14 @@
             "keys": "enter"
         },
         {
+            "command": "unbound",
+            "keys": "alt+shift+left"
+        },
+        {
+            "command": "unbound",
+            "keys": "shift+insert"
+        },
+        {
             "command": "paste",
             "id": "User.paste"
         },
@@ -68,7 +76,7 @@
     "alwaysShowNotificationIcon": false,
     "copyFormatting": "none",
     "copyOnSelect": false,
-    "defaultProfile": "{2945c038-d536-4884-a731-7ac06eccaeee}",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "firstWindowPreference": "defaultProfile",
     "newTabMenu": 
     [
@@ -87,16 +95,16 @@
                 "name": "Command Prompt"
             },
             {
+                "colorScheme": "Vintage",
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": false,
-                "name": "Windows PowerShell"
-            },
-            {
-                "commandline": "%ProgramFiles%\\PowerShell\\7\\pwsh.exe",
                 "font": 
                 {
-                    "face": "Monaspace Xenon",
+                    "axes": 
+                    {
+                        "ital": 1,
+                        "wght": 500
+                    },
+                    "face": "Monaspace Neon Var",
                     "features": 
                     {
                         "calt": 1,
@@ -114,11 +122,9 @@
                         "ss09": 1
                     }
                 },
-                "guid": "{2945c038-d536-4884-a731-7ac06eccaeee}",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
-                "icon": "ms-appx:///ProfileIcons/pwsh.png",
-                "name": "PowerShell",
-                "startingDirectory": "%USERPROFILE%"
+                "name": "Windows PowerShell"
             },
             {
                 "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",

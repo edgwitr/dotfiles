@@ -18,15 +18,19 @@ IME_SET(SetSts, WinTitle:="A")    {
           ,  "Int", SetSts) ;lParam  : 0 or 1
 }
 
+IN_TERMINAL() {
+    return WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")
+}
+
 vk1D:: IME_SET(0)
 vk1C:: IME_SET(1)
 Enter:: Send "`n"
 
 ; Caps -> F13(^)
-#HotIf WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe")
+#HotIf IN_TERMINAL()
     F13::Ctrl
 #HotIf
-#HotIf !(WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
+#HotIf !IN_TERMINAL()
     F13 & b:: Left
     F13 & f:: Right
     F13 & p:: Up
@@ -43,7 +47,7 @@ Enter:: Send "`n"
     F13 & m:: Send "`r"
 #HotIf
 
-; #HotIf GetKeyState("F13", "P") and (WinActive("ahk_exe alacritty.exe") or WinActive("ahk_exe WindowsTerminal.exe"))
+; #HotIf GetKeyState("F13", "P") and !IN_TERMINAL()
 ;     !p:: Send "^{Up}"
 ;     !n:: Send "^{Down}"
 ;     !b:: Send "^{Left}"
@@ -52,3 +56,4 @@ Enter:: Send "`n"
 ;     ^r:: Reload
 ;     ^k:: KeyHistory
 ;     ^w:: MsgBox WinGetClass("A")
+; #HotIf
