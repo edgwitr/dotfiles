@@ -1,8 +1,8 @@
-let s:denops = expand("~/.cache/vim/denotest/github.com/vim-denops/denops.vim")
-if !isdirectory(s:denops)
-  execute 'silent! !git clone https://github.com/vim-denops/denops.vim ' .. s:denops
-endif
-execute 'set runtimepath^=' . substitute(fnamemodify(s:denops, ':p') , '[/\\]$', '', '')
+" let s:denops = expand("~/.cache/vim/denotest/github.com/vim-denops/denops.vim")
+" if !isdirectory(s:denops)
+"   execute 'silent! !git clone https://github.com/vim-denops/denops.vim ' .. s:denops
+" endif
+" execute 'set runtimepath^=' . substitute(fnamemodify(s:denops, ':p') , '[/\\]$', '', '')
 
 " augroup MyDenopsConfig
 "   autocmd!
@@ -21,8 +21,8 @@ let g:denops_server_addr = "127.0.0.1:34141"
 " call petit#setup()
 " call petit#pairs#setup()
 
-set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
-call petit#treesitter#setup({
+" set runtimepath+=~/.cache/vim/denotest/github.com/edgwitr/petit.treesitter
+" call petit#treesitter#setup({
       \ 'highlight': {
         \ "enable": v:true,
         \ "disable": ["cpp"],

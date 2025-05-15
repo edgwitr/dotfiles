@@ -16,9 +16,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    catppuccin = {
-      url = "github:catppuccin/nix";
-    };
     certs = {
       url = "git+ssh://git@github.com/edgwitr/certs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -165,7 +162,7 @@
     {
       lenovo = inputs.nixos.lib.nixosSystem {
         system = x86linux;
-        modules = [ conf lnxc lenovo inputs.catppuccin.nixosModules.catppuccin ];
+        modules = [ conf lnxc lenovo ];
       };
       wsl = inputs.nixos.lib.nixosSystem {
         system = x86linux;
@@ -244,11 +241,14 @@
     let
       pkg = ({ pkgs, ... }: {
         home.packages = with pkgs; [
+          direnv
           devbox
           gh
-          powershell
+          netcat
           vim
           deno
+        ] ++ [
+          pkgs.hello
         ];
         programs = {
           home-manager.enable = true;
@@ -256,16 +256,12 @@
           neovim = {
             enable = true;
             extraPackages = with pkgs; [
-              gcc
-              unzip
-              cargo
               deno
             ];
           };
           tmux = {
             enable = true;
             sensibleOnTop = false;
-            shell = "${pkgs.powershell}/bin/pwsh";
             extraConfig = ''
               ${builtins.readFile ./tmux/tmux.conf}
             '';
@@ -274,8 +270,8 @@
       });
       env = ({ config, pkgs, baseshell, homedir, ... }:
       let
-        symlink = config.lib.file.mkOutOfStoreSymlink;
         home = "/${homedir}/${myname}";
+        # symlink = config.lib.file.mkOutOfStoreSymlink;
       in
       {
         home = {
@@ -284,21 +280,20 @@
           homeDirectory = home;
           sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
-            ZZORR = "tester";
           };
           file = {
           };
         };
         xdg = {
-          dataFile = {
-            "powershell/Modules".source = symlink /${homedir}/${myname}/.local/dotfiles/posh/Modules;
-          };
           configFile = {
-            "powershell/Microsoft.PowerShell_profile.ps1".source = ./posh/Microsoft.PowerShell_profile.ps1;
-            "vim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
-            "nvim".source = symlink /${homedir}/${myname}/.local/dotfiles/vimconf;
-            "rio".source = symlink /${homedir}/${myname}/.local/dotfiles/rio;
-            "karabiner".source = symlink /${homedir}/${myname}/.local/dotfiles/karabiner;
+            "vim" = {
+              source = ./vim;
+              recursive = true;
+            };
+            "nvim" = {
+              source = ./nvim;
+              recursive = true;
+            };
             "git" = {
               source = ./git;
               recursive = true;
@@ -306,7 +301,19 @@
           };
         };
       });
+      mac = ({ config, pkgs, homedir, ...}: {
+        xdg = {
+          configFile = {
+            "karabiner".source = config.lib.file.mkOutOfStoreSymlink /${homedir}/${myname}/.local/dotfiles/karabiner;
+          };
+        };
+      });
       linux = ({ pkgs, ...}: {
+        home.packages = with pkgs; [
+          zsh
+        ];
+      });
+      hard = ({ pkgs, ...}: {
         home.packages = [
           pkgs.xclip
           pkgs.xfce.thunar
@@ -330,7 +337,7 @@
           baseshell = "bash";
           homedir = "home";
         };
-        modules = [ pkg env linux ];
+        modules = [ pkg env linux hard ];
       };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
@@ -342,7 +349,7 @@
           baseshell = "bash";
           homedir = "home";
         };
-        modules = [ pkg env ];
+        modules = [ pkg env linux ];
       };
       mac = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
@@ -354,7 +361,7 @@
           baseshell = "zsh";
           homedir = "Users";
         };
-        modules = [ pkg env ];
+        modules = [ pkg env mac ];
       };
     };
   };
