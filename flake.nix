@@ -239,16 +239,29 @@
     # home-manager Configurations
     homeConfigurations =
     let
-      pkg = ({ pkgs, ... }: {
+      pkg = ({ pkgs, ... }: 
+      let
+        vimpkgs = with pkgs; [ deno ];
+        myVim = pkgs.symlinkJoin {
+          name = "my-vim";
+          paths = [ pkgs.vim ];
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/vim \
+              --prefix PATH : ${pkgs.lib.makeBinPath vimpkgs}
+          '';
+        };
+      in
+      {
         home.packages = with pkgs; [
           direnv
           devbox
           gh
           netcat
-          vim
-          deno
+          ghc
+          myVim
         ] ++ [
-          pkgs.hello
+          pkgs.fzf
         ];
         programs = {
           home-manager.enable = true;
