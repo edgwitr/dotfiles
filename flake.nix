@@ -230,6 +230,10 @@
               "karabiner-elements"
               "discord"
               "chatgpt"
+              "firefox"
+              "reaper"
+              "google-chrome"
+              "steam"
               "font-monaspace"
             ];
           };
