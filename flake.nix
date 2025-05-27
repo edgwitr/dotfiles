@@ -25,7 +25,7 @@
   outputs = inputs:
   let
     myname = "edgwitr";
-    ver = "24.11";
+    ver = "25.05";
     x86linux = "x86_64-linux";
     armmac = "aarch64-darwin";
   in
