@@ -71,7 +71,6 @@
           extraGroups = [ "networkmanager" "wheel" ];
         };
         programs.nix-ld.enable = true;
-        virtualisation.docker.enable = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
         boot = {
@@ -147,6 +146,9 @@
           hyprland.enable = true;
         };
       });
+      lnxh = {
+        virtualisation.docker.enable = true;
+      };
       wslc = ({ config, pkgs, lib, nixos-wsl, ... }: {
         imports = [ nixos-wsl.nixosModules.wsl ];
         wsl = {
@@ -154,7 +156,7 @@
           defaultUser = myname;
           wslConf = {
             interop.appendWindowsPath = false;
-            boot.systemd = true;
+            # boot.systemd = true;
           };
         };
       });
@@ -162,7 +164,7 @@
     {
       lenovo = inputs.nixos.lib.nixosSystem {
         system = x86linux;
-        modules = [ conf lnxc lenovo ];
+        modules = [ conf lnxc lnxh lenovo ];
       };
       wsl = inputs.nixos.lib.nixosSystem {
         system = x86linux;
@@ -241,7 +243,9 @@
     let
       pkg = ({ pkgs, ... }: 
       let
-        vimpkgs = with pkgs; [ deno ];
+        vimpkgs = with pkgs; [
+          deno
+        ];
         myVim = pkgs.symlinkJoin {
           name = "my-vim";
           paths = [ pkgs.vim ];
@@ -254,11 +258,9 @@
       in
       {
         home.packages = with pkgs; [
-          direnv
           devbox
           gh
           netcat
-          ghc
           myVim
         ] ++ [
           pkgs.fzf
@@ -266,33 +268,46 @@
         programs = {
           home-manager.enable = true;
           git.enable = true;
+          zsh.enable = true;
           neovim = {
             enable = true;
-            extraPackages = with pkgs; [
-              deno
-            ];
+            extraPackages = vimpkgs;
+          };
+          direnv = {
+            enable = true;
+            enableZshIntegration = true;
+            nix-direnv.enable = true;
           };
           tmux = {
             enable = true;
-            sensibleOnTop = false;
+            escapeTime = 0;
+            clock24 = true;
+            shell = "${pkgs.zsh}/bin/zsh";
+            # ${builtins.readFile ./tmux/tmux.conf}
             extraConfig = ''
-              ${builtins.readFile ./tmux/tmux.conf}
+              bind C-b send-prefix
+              set -g status-position top
+              set -g status-bg brightblack
+              set -g status-fg black
+              set -g status-left "#[fg=white,bg=black]#{?client_prefix,#[reverse],} [#S] #[default] "
             '';
           };
         };
       });
       env = ({ config, pkgs, baseshell, homedir, ... }:
       let
-        home = "/${homedir}/${myname}";
+        homeName = "/${homedir}/${myname}";
         # symlink = config.lib.file.mkOutOfStoreSymlink;
       in
       {
-        home = {
+        home = rec {
           stateVersion = ver;
           username = "${myname}";
-          homeDirectory = home;
-          sessionPath = [ "$HOME/.local/bin" ];
+          homeDirectory = homeName;
+          # sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
+            EDITOR = "vim";
+            NININI = "tera";
           };
           file = {
           };
@@ -321,12 +336,11 @@
           };
         };
       });
-      linux = ({ pkgs, ...}: {
+      lnxs = ({ pkgs, ...}: {
         home.packages = with pkgs; [
-          zsh
         ];
       });
-      hard = ({ pkgs, ...}: {
+      lnxh = ({ pkgs, ...}: {
         home.packages = [
           pkgs.xclip
           pkgs.xfce.thunar
@@ -350,7 +364,7 @@
           baseshell = "bash";
           homedir = "home";
         };
-        modules = [ pkg env linux hard ];
+        modules = [ pkg env lnxs lnxh ];
       };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
@@ -362,7 +376,7 @@
           baseshell = "bash";
           homedir = "home";
         };
-        modules = [ pkg env linux ];
+        modules = [ pkg env lnxs ];
       };
       mac = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
