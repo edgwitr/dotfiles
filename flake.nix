@@ -268,10 +268,21 @@
         programs = {
           home-manager.enable = true;
           git.enable = true;
-          zsh.enable = true;
+          zsh = {
+            enable = true;
+            dotDir = ".config/zsh";
+            autosuggestion = {
+              enable = true;
+            };
+            syntaxHighlighting = {
+              enable = true;
+            };
+          };
           neovim = {
             enable = true;
-            extraPackages = vimpkgs;
+            extraPackages = with pkgs; [
+              deno
+            ];
           };
           direnv = {
             enable = true;
