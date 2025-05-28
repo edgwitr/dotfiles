@@ -271,7 +271,9 @@
           zsh = {
             enable = true;
             dotDir = ".config/zsh";
+            defaultKeymap = "emacs";
             autosuggestion = {
+              # highlight = "fg=#d3d3d3";
               enable = true;
             };
             syntaxHighlighting = {
@@ -293,10 +295,13 @@
             enable = true;
             escapeTime = 0;
             clock24 = true;
+            prefix = "c-q";
             shell = "${pkgs.zsh}/bin/zsh";
             # ${builtins.readFile ./tmux/tmux.conf}
+            # set -ag terminal-overrides ",$TERM:Tc"
+            # terminal = "tmux-256color";
             extraConfig = ''
-              bind C-b send-prefix
+              set -as terminal-features ",*:RGB"
               set -g status-position top
               set -g status-bg brightblack
               set -g status-fg black
