@@ -271,13 +271,21 @@
           zsh = {
             enable = true;
             dotDir = ".config/zsh";
-            defaultKeymap = "emacs";
-            autosuggestion = {
-              # highlight = "fg=#d3d3d3";
+            prezto = {
               enable = true;
+              prompt = {
+                theme = "giddie";
+              };
             };
-            syntaxHighlighting = {
-              enable = true;
+            # defaultKeymap = "emacs";
+            # autosuggestion = {
+            #   enable = true;
+            # };
+            # syntaxHighlighting = {
+            #   enable = true;
+            # };
+            zsh-abbr = {
+              enable = false;
             };
           };
           neovim = {
@@ -298,10 +306,9 @@
             prefix = "c-q";
             shell = "${pkgs.zsh}/bin/zsh";
             # ${builtins.readFile ./tmux/tmux.conf}
-            # set -ag terminal-overrides ",$TERM:Tc"
-            # terminal = "tmux-256color";
+            terminal = "screen-256color";
             extraConfig = ''
-              set -as terminal-features ",*:RGB"
+              set -g terminal-features "*:RGB"
               set -g status-position top
               set -g status-bg brightblack
               set -g status-fg black
@@ -334,10 +341,10 @@
               source = ./vim;
               recursive = true;
             };
-            "nvim" = {
-              source = ./nvim;
-              recursive = true;
-            };
+            # "nvim" = {
+            #   source = ./nvim;
+            #   recursive = true;
+            # };
             "git" = {
               source = ./git;
               recursive = true;
