@@ -259,7 +259,6 @@
       {
         home.packages = with pkgs; [
           devbox
-          gh
           netcat
           myVim
         ] ++ [
@@ -267,25 +266,24 @@
         ];
         programs = {
           home-manager.enable = true;
-          git.enable = true;
+          git = {
+            enable = true;
+          };
+          gh = {
+            enable = true;
+          };
           zsh = {
             enable = true;
             dotDir = ".config/zsh";
-            prezto = {
+            defaultKeymap = "emacs";
+            autosuggestion = {
               enable = true;
-              prompt = {
-                theme = "giddie";
-              };
             };
-            # defaultKeymap = "emacs";
-            # autosuggestion = {
-            #   enable = true;
-            # };
-            # syntaxHighlighting = {
-            #   enable = true;
-            # };
+            syntaxHighlighting = {
+              enable = true;
+            };
             zsh-abbr = {
-              enable = false;
+              enable = true;
             };
           };
           neovim = {
