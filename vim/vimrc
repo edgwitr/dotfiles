@@ -1,3 +1,18 @@
 syntax on
 colorscheme habamax
 set encoding=utf-8
+set number
+set relativenumber
+set smartindent
+set laststatus=2
+set showmatch
+set cursorline
+set cursorcolumn
+set list listchars=tab:>-,trail:-,eol:$,extends:>,precedes:<,nbsp:%
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
