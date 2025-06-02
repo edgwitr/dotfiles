@@ -71,6 +71,7 @@
           extraGroups = [ "networkmanager" "wheel" ];
         };
         programs.nix-ld.enable = true;
+        nixpkgs.config.allowUnfree = true;
       });
       lnxc = ({ config, pkgs, lib, ... }: {
         boot = {
@@ -141,7 +142,6 @@
             pulse.enable = true;
           };
         };
-        nixpkgs.config.allowUnfree = true;
         programs = {
           hyprland.enable = true;
         };
@@ -245,7 +245,7 @@
     # home-manager Configurations
     homeConfigurations =
     let
-      pkg = ({ pkgs, ... }: 
+      pkg = ({ pkgs, lib, ... }: 
       let
         vimpkgs = with pkgs; [
           deno
@@ -286,9 +286,12 @@
             syntaxHighlighting = {
               enable = true;
             };
-            zsh-abbr = {
-              enable = true;
-            };
+            initContent = lib.mkMerge [
+              (lib.mkOrder 1000 ''
+                source ${./zsh/abbr.zsh}
+                source ${./zsh/prompt.zsh}
+              '')
+            ];
           };
           neovim = {
             enable = true;
