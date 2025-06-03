@@ -1,8 +1,6 @@
-# Simple abbreviations for zsh with cursor positioning
-# Add this to your .zshrc
-
-# Single dictionary for all abbreviations
-# Prefix 'g:' for global abbreviations
+# Value format: [g:]<expansion>[|n]
+# 'g:' prefix for global abbreviations (anywhere on line)
+# '|n' suffix for no-space abbreviations (don't add trailing space)
 typeset -A abbr
 
 # Regular abbreviations (command position only)
@@ -20,40 +18,81 @@ abbr[func]="function %() { % }"
 abbr[for]="for % in %; do % done"
 
 # Global abbreviations (anywhere on line)
-abbr[g:G]="| grep \"%\""
-abbr[g:L]="| less"
-abbr[g:H]="| head"
-abbr[g:T]="| tail"
-abbr[g:S]="| sort"
-abbr[g:replace]="sed 's/%/%/g'"
+abbr[G]="g:| grep \"%\""
+abbr[L]="g:| less"
+abbr[H]="g:| head"
+abbr[T]="g:| tail"
+abbr[S]="g:| sort"
+abbr[replace]="g:sed 's/%/%/g'"
 
-# Expansion function with multiple cursor support
-expand-abbreviation() {
+# No-space abbreviations (don't add trailing space)
+abbr[rehome]="home-manager switch --flake ~/.local/dotfiles/#|n"
+
+# この関数を削除して、get-expansion内で直接処理
+get-expansion() {
     local word="${LBUFFER##* }"
     
-    # First: Check for global abbreviation
-    local expansion="${abbr[g:$word]}"
-    
-    # Fallback: Check for regular abbreviation only at command position
-    if [[ -z "$expansion" && "$LBUFFER" =~ ^[[:space:]]*${word}$ ]]; then
-        expansion="${abbr[$word]}"
-    fi
-    
-    if [[ -n "$expansion" ]]; then
-        # Handle cursor positioning if % marker exists
-        if [[ "$expansion" == *"%"* ]]; then
-            # Split at first % marker and position cursor there
-            LBUFFER="${LBUFFER%$word}${expansion%%\%*}"
-            RBUFFER="${expansion#*\%}${RBUFFER}"
+    if [[ -n "${abbr[$word]}" ]]; then
+        local value="${abbr[$word]}"
+        local expansion="" is_global=false no_space=false
+        
+        [[ "$value" == g:* ]] && { is_global=true; value="${value#g:}"; }
+        [[ "$value" == *\|n ]] && { no_space=true; expansion="${value%|n}"; } || expansion="$value"
+        
+        if [[ "$is_global" == "true" || "$LBUFFER" =~ ^[[:space:]]*${word}$ ]]; then
+            echo "$expansion,$no_space"
         else
-            LBUFFER="${LBUFFER%$word}${expansion} "
+            echo ","
         fi
+    else
+        echo ","
+    fi
+}
+
+apply-expansion() {
+    local expansion="$1"
+    local word="${LBUFFER##* }"
+
+    if [[ "$expansion" == *"%"* ]]; then
+        # Split at first % marker and position cursor there
+        LBUFFER="${LBUFFER%$word}${expansion%%\%*}"
+        RBUFFER="${expansion#*\%}${RBUFFER}"
+        return 0  # Has placeholder
+    else
+        LBUFFER="${LBUFFER%$word}${expansion}"
+        return 1  # No placeholder
+    fi
+}
+
+# Expand abbreviation (for space key)
+expand-abbreviation() {
+    local result=$(get-expansion)
+    local expansion="${result%,*}"
+    local no_space="${result#*,}"
+
+    if [[ -n "$expansion" ]]; then
+        apply-expansion "$expansion"
+        # Add space only if no placeholder and not a no-space abbreviation
+        [[ $? -eq 1 && "$no_space" != "true" ]] && LBUFFER+=" "
     else
         LBUFFER+=" "
     fi
 }
 
-# Function to jump to next placeholder
+# Expand and execute (for Enter key)
+expand-and-execute() {
+    local result=$(get-expansion)
+    local expansion="${result%,*}"
+
+    if [[ -n "$expansion" ]]; then
+        apply-expansion "$expansion"
+        [[ $? -eq 0 ]] && return  # Don't execute if has placeholder
+    fi
+
+    zle accept-line
+}
+
+# Jump to next placeholder
 next-placeholder() {
     if [[ "$RBUFFER" == *"%"* ]]; then
         LBUFFER+="${RBUFFER%%\%*}"
@@ -65,15 +104,10 @@ next-placeholder() {
 }
 
 zle -N expand-abbreviation
+zle -N expand-and-execute
 zle -N next-placeholder
 
-# Bind space to expand abbreviations
+# Key bindings
 bindkey " " expand-abbreviation
-
-# Bind Ctrl+J to jump to next placeholder (or use any key you prefer)
-# Alternative bindings you can use:
-# bindkey "^J" next-placeholder     # Ctrl+J
-# bindkey "^N" next-placeholder     # Ctrl+N
-# bindkey "^]" next-placeholder     # Ctrl+]
+bindkey "^M" expand-and-execute
 bindkey "^J" next-placeholder
-
