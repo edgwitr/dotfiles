@@ -193,7 +193,8 @@
             nerd-fonts.caskaydia-cove
           ];
           system = {
-            stateVersion = 5;
+            primaryUser = myname;
+            stateVersion = 6;
             defaults = {
               NSGlobalDomain = {
                 AppleInterfaceStyle = "Dark";
@@ -224,17 +225,14 @@
               cleanup = "uninstall";
             };
             casks = [
-              "alacritty"
               "visual-studio-code"
               "elecom-mouse-util"
               "karabiner-elements"
               "discord"
-              "chatgpt"
               "firefox"
               "reaper"
               "google-chrome"
               "steam"
-              "font-monaspace"
             ];
           };
         })
