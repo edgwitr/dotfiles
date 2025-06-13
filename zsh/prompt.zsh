@@ -91,4 +91,4 @@ add-zsh-hook precmd update_git_cache
 
 # ───【5】実際のプロンプトを設定 ─────────────────────────────────
 setopt PROMPT_SUBST
-PROMPT=$'%F{cyan}[%~]%f $(git_prompt_info)\n%F{green}%n@%m%f %# '
+PROMPT=$'%F{cyan}[%~]%f %F{yellow}$(git_prompt_info)%f\n%F{%(?.green.red)}%L>%f '

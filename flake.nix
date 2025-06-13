@@ -247,8 +247,9 @@
     let
       pkg = ({ pkgs, lib, ... }: 
       let
-        vimpkgs = with pkgs; [
-          deno
+        lsppkgs = with pkgs; [
+          gopls
+          haskell-language-server
         ];
         myVim = pkgs.symlinkJoin {
           name = "my-vim";
@@ -256,15 +257,15 @@
           buildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
             wrapProgram $out/bin/vim \
-              --prefix PATH : ${pkgs.lib.makeBinPath vimpkgs}
+              --prefix PATH : ${pkgs.lib.makeBinPath lsppkgs}
           '';
         };
       in
       {
         home.packages = with pkgs; [
-          devbox
-          netcat
           myVim
+          deno
+          ghq
         ] ++ [
           pkgs.fzf
         ];
@@ -298,7 +299,16 @@
             coc = {
               enable = true;
               settings = {
+                "suggest.noselect" = true;
+                "suggest.enablePreview" = true;
+                "suggest.enablePreselect" = false;
+                "suggest.disableKind" = true;
                 languageserver = {
+                  go = {
+                    command = "gopls";
+                    rootPatterns = [ "go.mod" ];
+                    filetypes = [ "go" ];
+                  };
                   haskell = {
                     command = "haskell-language-server-wrapper";
                     args = [ "--lsp" ];
@@ -315,9 +325,8 @@
               };
             };
             extraPackages = with pkgs; [
-              deno
               nodejs
-            ];
+            ] ++ lsppkgs;
           };
           direnv = {
             enable = true;
@@ -342,7 +351,7 @@
           };
         };
       });
-      env = ({ config, pkgs, baseshell, homedir, ... }:
+      env = ({ config, pkgs, homedir, ... }:
       let
         homeName = "/${homedir}/${myname}";
         # symlink = config.lib.file.mkOutOfStoreSymlink;
@@ -409,7 +418,6 @@
         };
         extraSpecialArgs = {
           inherit inputs;
-          baseshell = "bash";
           homedir = "home";
         };
         modules = [ pkg env lnxs lnxh ];
@@ -421,7 +429,6 @@
         };
         extraSpecialArgs = {
           inherit inputs;
-          baseshell = "bash";
           homedir = "home";
         };
         modules = [ pkg env lnxs ];
@@ -433,7 +440,6 @@
         };
         extraSpecialArgs = {
           inherit inputs;
-          baseshell = "zsh";
           homedir = "Users";
         };
         modules = [ pkg env mac ];
