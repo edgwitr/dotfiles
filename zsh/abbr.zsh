@@ -6,6 +6,7 @@ typeset -A abbr
 # Regular abbreviations (command position only)
 abbr[gc]="git commit"
 abbr[gcm]="git commit -m \"%\""
+abbr[gca]="git commit --amend -m \"%\""
 abbr[gst]="git status"
 abbr[gd]="git diff"
 abbr[ga]="git add -p"
