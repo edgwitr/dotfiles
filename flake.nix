@@ -16,6 +16,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     certs = {
       url = "git+ssh://git@github.com/edgwitr/certs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -233,6 +237,8 @@
               "reaper"
               "google-chrome"
               "steam"
+              "ghostty"
+              "container"
             ];
           };
         })
@@ -274,6 +280,10 @@
           };
           gh = {
             enable = true;
+            settings = {
+              git_protocol = "ssh";
+              editor = "nvim";
+            };
           };
           zsh = {
             enable = true;
@@ -292,40 +302,70 @@
               '')
             ];
           };
-          neovim = {
+          nixvim = {
             enable = true;
-            coc = {
-              enable = true;
-              settings = {
-                "suggest.noselect" = true;
-                "suggest.enablePreview" = true;
-                "suggest.enablePreselect" = false;
-                "suggest.disableKind" = true;
-                languageserver = {
-                  go = {
-                    command = "gopls";
-                    rootPatterns = [ "go.mod" ];
-                    filetypes = [ "go" ];
-                  };
-                  haskell = {
-                    command = "haskell-language-server-wrapper";
-                    args = [ "--lsp" ];
-                    rootPatterns = [
-                      "*.cabal"
-                      "stack.yaml"
-                      "cabal.project"
-                      "package.yaml"
-                      "hie.yaml"
-                    ];
-                    filetypes = [ "haskell" "lhaskell" ];
-                  };
-                };
-              };
+            extraPlugins = with pkgs.vimPlugins; [
+              tokyonight-nvim
+            ];
+            colorscheme = "tokyonight";
+            opts = {
+              number = true;
+              relativenumber = true;
+              expandtab = true;
+              shiftwidth = 2;
+              ignorecase = true;
+              smartcase = true;
+              signcolumn = "yes";
+              list = true;
+              listchars = "tab:>-,trail:$,extends:>,precedes:<";
             };
-            extraPackages = with pkgs; [
-              nodejs
-            ] ++ lsppkgs;
           };
+          # neovim = {
+          #   enable = true;
+          #   defaultEditor = true;
+          #   extraLuaConfig = ''
+          #     vim.cmd("colorscheme sorbet")
+          #     vim.opt.number = true
+          #     vim.opt.relativenumber = true
+          #     vim.opt.expandtab = true
+          #     vim.opt.shiftwidth = 2
+          #     vim.opt.ignorecase = true
+          #     vim.opt.signcolumn = "yes"
+          #     vim.opt.list = true
+          #     vim.opt.listchars = "tab:>-,trail:$,extends:>,precedes:<"
+          #   '';
+          #   coc = {
+          #     enable = true;
+          #     settings = {
+          #       "suggest.noselect" = true;
+          #       "suggest.enablePreview" = true;
+          #       "suggest.enablePreselect" = false;
+          #       "suggest.disableKind" = true;
+          #       languageserver = {
+          #         go = {
+          #           command = "gopls";
+          #           rootPatterns = [ "go.mod" ];
+          #           filetypes = [ "go" ];
+          #         };
+          #         haskell = {
+          #           command = "haskell-language-server-wrapper";
+          #           args = [ "--lsp" ];
+          #           rootPatterns = [
+          #             "*.cabal"
+          #             "stack.yaml"
+          #             "cabal.project"
+          #             "package.yaml"
+          #             "hie.yaml"
+          #           ];
+          #           filetypes = [ "haskell" "lhaskell" ];
+          #         };
+          #       };
+          #     };
+          #   };
+          #   extraPackages = with pkgs; [
+          #     nodejs
+          #   ] ++ lsppkgs;
+          # };
           direnv = {
             enable = true;
             enableZshIntegration = true;
@@ -359,9 +399,8 @@
           stateVersion = ver;
           username = "${myname}";
           homeDirectory = homeName;
-          # sessionPath = [ "$HOME/.local/bin" ];
+          sessionPath = [ "$HOME/.local/bin" ];
           sessionVariables = {
-            EDITOR = "vim";
             NININI = "tera";
           };
           file = {
@@ -407,6 +446,7 @@
           vscode.enable = true;
         };
       });
+      nv = inputs.nixvim.homeManagerModules.nixvim;
     in
     {
       lnx = inputs.home-manager.lib.homeManagerConfiguration {
@@ -418,7 +458,7 @@
           inherit inputs;
           homedir = "home";
         };
-        modules = [ pkg env lnxs lnxh ];
+        modules = [ pkg env nv lnxs lnxh ];
       };
       wsl = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
@@ -429,7 +469,7 @@
           inherit inputs;
           homedir = "home";
         };
-        modules = [ pkg env lnxs ];
+        modules = [ pkg env nv lnxs ];
       };
       mac = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
@@ -440,7 +480,7 @@
           inherit inputs;
           homedir = "Users";
         };
-        modules = [ pkg env mac ];
+        modules = [ pkg env nv mac ];
       };
     };
   };

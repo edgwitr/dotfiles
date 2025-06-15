@@ -36,6 +36,8 @@ abbr[replace]="g:sed 's/%/%/g'"
 
 # No-space abbreviations (don't add trailing space)
 abbr[rehome]="home-manager switch --flake ~/.local/dotfiles/#|n"
+abbr[renix]="sudo nixos-rebuild switch --flake ~/.local/dotfiles/#|n"
+abbr[remac]="sudo darwin-rebuild switch --flake ~/.local/dotfiles/#|n"
 
 # この関数を削除して、get-expansion内で直接処理
 get-expansion() {
